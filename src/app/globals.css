@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-purple-base: #0c0818;
+  --color-purple-primary: #7B2FFF;
+  --color-pink-accent: #FF2D8B;
+  --color-text-primary: #f0ebff;
+  --color-text-muted: #b093ff;
+  --color-green-success: #39FF14;
+  --color-amber-warning: #FFB830;
+  
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--color-purple-base);
+    color: var(--color-text-primary);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .glass-panel {
+    @apply bg-[#b093ff]/5 border border-[#b093ff]/20 backdrop-blur-md rounded-2xl;
+  }
+  .glass-button {
+    @apply bg-[#7B2FFF]/20 border border-[#7B2FFF]/50 hover:bg-[#7B2FFF]/40 transition-colors rounded-xl;
+  }
+  .glow-primary {
+    box-shadow: 0 0 15px rgba(123, 47, 255, 0.5);
+  }
+  .glow-accent {
+    box-shadow: 0 0 15px rgba(255, 45, 139, 0.5);
+  }
+  .glow-success {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+  }
+}
+
+/* Custom scrollbar for chat and lists */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(176, 147, 255, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(176, 147, 255, 0.5);
 }
