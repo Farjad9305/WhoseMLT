@@ -8,6 +8,7 @@ export function useRoom(roomId: string, playerId: string | null) {
   const [chat, setChat] = useState<ChatMessageData[]>([])
   const [votes, setVotes] = useState<VoteData[]>([])
   const [customQTotal, setCustomQTotal] = useState<number>(0)
+  const [typingUsers, setTypingUsers] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
@@ -61,11 +62,14 @@ export function useRoom(roomId: string, playerId: string | null) {
     const channel = pusherClient.subscribe(channelName)
     
     channel.bind('player-joined', (data: PlayerData) => {
-      setPlayers(prev => [...prev.filter(p => p.id !== data.id), data])
+      setPlayers(prev => {
+        if (prev.find(p => p.id === data.id)) return prev
+        return [...prev, data]
+      })
     })
     
-    channel.bind('player-left', (data: {id: string}) => {
-      setPlayers(prev => prev.filter(p => p.id !== data.id))
+    channel.bind('player-left', ({ playerId }: { playerId: string }) => {
+      setPlayers(prev => prev.filter(p => p.id !== playerId))
     })
     
     channel.bind('player-renamed', (data: {id: string, name: string}) => {
@@ -85,6 +89,18 @@ export function useRoom(roomId: string, playerId: string | null) {
     
     channel.bind('chat-message', (data: ChatMessageData) => {
       setChat(prev => [...prev, data])
+    })
+
+    channel.bind('user-typing', ({ name }: { name: string }) => {
+      setTypingUsers(prev => {
+        if (!prev.includes(name)) {
+          setTimeout(() => {
+            setTypingUsers(current => current.filter(n => n !== name))
+          }, 2000)
+          return [...prev, name]
+        }
+        return prev
+      })
     })
     
     channel.bind('game-started', (data: { questions: Question[], settings: RoomSettings }) => {
@@ -160,5 +176,5 @@ export function useRoom(roomId: string, playerId: string | null) {
     })
   }
 
-  return { room, players, chat, votes, customQTotal, isLoading, error, timeLeft, updateSettings, sendChat, advancePhase }
+  return { room, players, chat, votes, customQTotal, isLoading, error, timeLeft, typingUsers, updateSettings, sendChat, advancePhase }
 }

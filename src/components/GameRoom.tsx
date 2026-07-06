@@ -13,6 +13,7 @@ import { useVotes } from '@/hooks/useVotes'
 export default function GameRoom({ roomId }: { roomId: string }) {
   const router = useRouter()
   const [playerId, setPlayerId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'players' | 'game' | 'chat'>('game')
   
   useEffect(() => {
     const pid = sessionStorage.getItem('playerId')
@@ -26,7 +27,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
 
   const { 
     room, players, chat, votes: roomVotes, customQTotal, 
-    isLoading, error, timeLeft, 
+    isLoading, error, timeLeft, typingUsers,
     updateSettings, sendChat, advancePhase 
   } = useRoom(roomId, playerId)
   
@@ -76,29 +77,53 @@ export default function GameRoom({ roomId }: { roomId: string }) {
     })
   }
 
+  const handleLeaveRoom = async () => {
+    if (!playerId) return
+    await fetch(`/api/players/${roomId}/leave`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId })
+    })
+    sessionStorage.removeItem('roomId')
+    router.push('/')
+  }
+
   return (
-    <div className="max-w-[1600px] mx-auto h-screen p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden">
+    <div className="max-w-[1600px] mx-auto h-screen flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-[#050012] md:bg-transparent p-0 md:p-6">
+      
+      {/* Mobile Tabs Header */}
+      <div className="md:hidden flex items-center justify-between bg-black/40 p-3 shadow-md shrink-0">
+        <div className="flex gap-2">
+          <button onClick={() => setActiveTab('players')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'players' ? 'bg-[#7B2FFF] text-white' : 'bg-white/5 text-white/50'}`}>
+            Players ({players.length})
+          </button>
+          <button onClick={() => setActiveTab('game')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'game' ? 'bg-[#FF2D8B] text-white' : 'bg-white/5 text-white/50'}`}>
+            Game
+          </button>
+          <button onClick={() => setActiveTab('chat')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'chat' ? 'bg-[#39FF14] text-black' : 'bg-white/5 text-white/50'}`}>
+            Chat
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Header / Top Right actions (Removed explicit leave button) */}
       
       {/* Left Column - Players */}
-      <div className="w-full md:w-64 shrink-0 h-48 md:h-full hidden md:block">
+      <div className={`w-full md:w-64 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'players' ? 'block' : 'hidden'}`}>
+        <div className="md:hidden mb-4 flex justify-between items-center">
+           <h2 className="text-xl font-bold text-[#FF2D8B]">Players</h2>
+        </div>
         <PlayerList 
           players={players} 
           hostId={room.hostId} 
           currentId={playerId}
           onRename={room.phase === 'lobby' ? handleRename : undefined}
+          onLeave={handleLeaveRoom}
         />
       </div>
 
-      {/* Mobile Player List (Collapsible / Top row) */}
-      <div className="md:hidden glass-panel p-3 shrink-0 flex items-center justify-between">
-         <span className="font-bold text-[#FF2D8B]">Players: {players.length}</span>
-         {room.phase === 'lobby' && (
-           <span className="text-xs text-[#b093ff]">Change name on Desktop</span>
-         )}
-      </div>
-
       {/* Middle Column - Game Area */}
-      <div className="flex-1 min-w-0 h-full">
+      <div className={`flex-1 min-w-0 h-full p-4 md:p-0 md:flex flex-col ${activeTab === 'game' ? 'flex' : 'hidden'}`}>
         {room.phase === 'lobby' && (
           <LobbyPanel 
             roomId={roomId}
@@ -139,11 +164,15 @@ export default function GameRoom({ roomId }: { roomId: string }) {
       </div>
 
       {/* Right Column - Chat */}
-      <div className="w-full md:w-80 shrink-0 h-64 md:h-full hidden md:block">
-        <ChatPanel messages={chat} onSend={(text) => sendChat(text, players.find(p=>p.id===playerId)?.name || 'Unknown')} />
+      <div className={`w-full md:w-80 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'chat' ? 'block' : 'hidden'}`}>
+        <ChatPanel 
+          roomId={roomId}
+          messages={chat} 
+          typingUsers={typingUsers}
+          onSend={(text) => sendChat(text, players.find(p=>p.id===playerId)?.name || 'Unknown')} 
+          playerName={players.find(p=>p.id===playerId)?.name || 'Unknown'}
+        />
       </div>
-
-      {/* Mobile Chat Placeholder (Optional) */}
     </div>
   )
 }

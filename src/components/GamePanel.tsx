@@ -80,8 +80,10 @@ export default function GamePanel({
             return (
               <button
                 key={p.id}
+                onClick={() => {
+                  onVote(p.id, multipleVotes)
+                }}
                 disabled={!isVoting}
-                onClick={() => onVote(p.id, multipleVotes)}
                 className={`relative overflow-hidden p-4 rounded-xl transition-all text-left group
                   ${!isVoting ? 'opacity-70 cursor-not-allowed bg-black/20 border border-white/5' : 
                     isSelected ? 'bg-[#7B2FFF]/30 border border-[#7B2FFF] glow-primary transform scale-[1.02]' : 

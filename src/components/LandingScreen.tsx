@@ -65,8 +65,15 @@ export default function LandingScreen() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="glass-panel p-8 w-full max-w-md">
+    <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-[#0c0818] via-[#2a1154] to-[#0c0818] animate-gradient-shift relative overflow-hidden">
+      
+      {/* Floating Background Emojis */}
+      <div className="absolute top-[10%] left-[10%] text-6xl animate-float pointer-events-none select-none">🤔</div>
+      <div className="absolute top-[20%] right-[15%] text-7xl animate-float-delayed pointer-events-none select-none">🎯</div>
+      <div className="absolute bottom-[20%] left-[20%] text-5xl animate-float-delayed pointer-events-none select-none">🤫</div>
+      <div className="absolute bottom-[10%] right-[10%] text-6xl animate-float pointer-events-none select-none">😂</div>
+
+      <div className="glass-panel p-8 w-full max-w-md z-10 mt-10">
         <h1 className="font-display font-bold text-4xl text-center mb-2 text-[#7B2FFF] glow-primary">WhoseMLT</h1>
         <p className="text-center text-[#b093ff] mb-8">The most likely to party game</p>
         
@@ -124,6 +131,19 @@ export default function LandingScreen() {
             </button>
           </form>
         )}
+      </div>
+
+      {/* How to Play Card */}
+      <div className="glass-panel p-6 w-full max-w-md z-10 mt-8 mb-10">
+        <h2 className="font-bold text-xl text-[#FF2D8B] mb-4 flex items-center gap-2">
+          <span>📖</span> How to Play
+        </h2>
+        <ol className="space-y-4 text-sm text-[#f0ebff] list-decimal list-inside">
+          <li><strong className="text-white">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
+          <li><strong className="text-white">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
+          <li><strong className="text-white">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>
+          <li><strong className="text-white">Results:</strong> See who got the most votes at the end of the game and discover what your friends really think of you.</li>
+        </ol>
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { PlayerData, Question, VoteData } from '@/lib/types'
 import { useState, useMemo, useEffect } from 'react'
+import confetti from 'canvas-confetti'
 
 export default function ResultsPanel({
   roomId,
@@ -27,6 +28,34 @@ export default function ResultsPanel({
       })
       .catch(console.error)
   }, [roomId])
+
+  // Fire confetti on mount
+  useEffect(() => {
+    const duration = 3000
+    const end = Date.now() + duration
+
+    const frame = () => {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: ['#7B2FFF', '#FF2D8B', '#39FF14', '#FFB830']
+      })
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: ['#7B2FFF', '#FF2D8B', '#39FF14', '#FFB830']
+      })
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame)
+      }
+    }
+    frame()
+  }, [])
 
   const leaderboard = useMemo(() => {
     const counts: Record<string, number> = {}

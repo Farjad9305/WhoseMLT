@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { PlayerData } from '@/lib/types'
 
-export default function PlayerList({ players, hostId, currentId, onRename }: { players: PlayerData[], hostId: string, currentId: string, onRename?: (name: string) => void }) {
+export default function PlayerList({ players, hostId, currentId, onRename, onLeave }: { players: PlayerData[], hostId: string, currentId: string, onRename?: (name: string) => void, onLeave: () => void }) {
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState('')
 
@@ -47,6 +47,12 @@ export default function PlayerList({ players, hostId, currentId, onRename }: { p
           )}
         </div>
       )}
+      
+      <div className="mt-4">
+        <button onClick={onLeave} className="w-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white py-2 rounded-xl text-sm font-bold transition-all">
+          Leave Room
+        </button>
+      </div>
     </div>
   )
 }
