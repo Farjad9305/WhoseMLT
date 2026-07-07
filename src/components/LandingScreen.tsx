@@ -65,7 +65,7 @@ export default function LandingScreen() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-[#0c0818] via-[#2a1154] to-[#0c0818] animate-gradient-shift relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center p-4 relative overflow-hidden bg-transparent">
       
       {/* Floating Background Emojis */}
       <div className="absolute top-[5%] left-[10%] text-6xl animate-float opacity-80 pointer-events-none select-none">🤔</div>
@@ -80,18 +80,18 @@ export default function LandingScreen() {
       <div className="absolute bottom-[8%] right-[20%] text-6xl animate-float-delayed opacity-80 pointer-events-none select-none">😂</div>
 
       <div className="glass-panel p-8 w-full max-w-md z-10 mt-10">
-        <h1 className="font-display font-bold text-4xl text-center mb-2 text-[#7B2FFF] glow-primary">WhoseMLT</h1>
-        <p className="text-center text-[#b093ff] mb-8">The most likely to party game</p>
+        <h1 className="font-display font-bold text-4xl text-center mb-2 text-[#FF2D8B] glow-primary">WhoseMLT</h1>
+        <p className="text-center text-[#F0EBFF] mb-8">The most likely to party game</p>
         
         <div className="flex mb-6 bg-black/40 p-1 rounded-xl">
           <button 
-            className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${tab === 'create' ? 'bg-[#7B2FFF] text-white shadow-lg' : 'text-[#b093ff]'}`}
+            className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${tab === 'create' ? 'bg-[#FF2D8B] text-white shadow-lg' : 'text-[#F0EBFF]'}`}
             onClick={() => { setTab('create'); setError('') }}
           >
             Create Room
           </button>
           <button 
-            className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${tab === 'join' ? 'bg-[#FF2D8B] text-white shadow-lg' : 'text-[#b093ff]'}`}
+            className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${tab === 'join' ? 'bg-[#7B2FFF] text-white shadow-lg' : 'text-[#F0EBFF]'}`}
             onClick={() => { setTab('join'); setError('') }}
           >
             Join Room
@@ -99,7 +99,7 @@ export default function LandingScreen() {
         </div>
 
         {error && (
-          <div className="bg-[#FF2D8B]/20 border border-[#FF2D8B] text-[#FF2D8B] p-3 rounded-xl mb-6 text-sm text-center">
+          <div className="bg-[#7B2FFF]/20 border border-[#7B2FFF] text-[#7B2FFF] p-3 rounded-xl mb-6 text-sm text-center">
             {error}
           </div>
         )}
@@ -107,32 +107,32 @@ export default function LandingScreen() {
         {tab === 'create' ? (
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-[#b093ff] mb-1">Display Name</label>
-              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#b093ff]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
+              <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Display Name</label>
+              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#b093ff] mb-1">Room Password</label>
-              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#b093ff]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
+              <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room Password</label>
+              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
             </div>
-            <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#7B2FFF] text-white glow-primary hover:bg-[#b093ff] transition-all mt-4">
+            <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#FF2D8B] text-white glow-primary hover:bg-[#F0EBFF] transition-all mt-4">
               {loading ? 'Creating...' : 'Create Room'}
             </button>
           </form>
         ) : (
           <form onSubmit={handleJoin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-[#b093ff] mb-1">Display Name</label>
-              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#b093ff]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
+              <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Display Name</label>
+              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#b093ff] mb-1">Room ID</label>
-              <input type="text" required maxLength={8} value={roomId} onChange={e => setRoomId(e.target.value.toUpperCase())} className="w-full bg-black/40 border border-[#b093ff]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors font-mono tracking-widest text-center uppercase" />
+              <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room ID</label>
+              <input type="text" required maxLength={8} value={roomId} onChange={e => setRoomId(e.target.value.toUpperCase())} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors font-mono tracking-widest text-center uppercase" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[#b093ff] mb-1">Room Password</label>
-              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#b093ff]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
+              <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room Password</label>
+              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
             </div>
-            <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#FF2D8B] text-white glow-accent hover:bg-pink-400 transition-all mt-4">
+            <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#7B2FFF] text-white glow-accent hover:bg-pink-400 transition-all mt-4">
               {loading ? 'Joining...' : 'Join Room'}
             </button>
           </form>
@@ -141,10 +141,10 @@ export default function LandingScreen() {
 
       {/* How to Play Card */}
       <div className="glass-panel p-6 w-full max-w-md z-10 mt-8 mb-10">
-        <h2 className="font-bold text-xl text-[#FF2D8B] mb-4 flex items-center gap-2">
+        <h2 className="font-bold text-xl text-[#7B2FFF] mb-4 flex items-center gap-2">
           <span>📖</span> How to Play
         </h2>
-        <ol className="space-y-4 text-sm text-[#f0ebff] list-decimal list-inside">
+        <ol className="space-y-4 text-sm text-[#FFFFFF] list-decimal list-inside">
           <li><strong className="text-white">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
           <li><strong className="text-white">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
           <li><strong className="text-white">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>

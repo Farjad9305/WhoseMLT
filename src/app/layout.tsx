@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${dmSans.variable} antialiased bg-[#0c0818] text-[#f0ebff] font-sans min-h-screen selection:bg-[#7B2FFF] selection:text-white`}>
+      <body className={`${syne.variable} ${dmSans.variable} antialiased bg-[#2B2D42] text-[#FFFFFF] font-sans min-h-screen selection:bg-[#FF2D8B] selection:text-white`}>
         {children}
       </body>
     </html>

@@ -157,17 +157,17 @@ export default function LobbyPanel({
   return (
     <div className="glass-panel p-6 h-full flex flex-col overflow-y-auto">
       <div className="text-center mb-8">
-        <p className="text-[#b093ff] uppercase tracking-widest text-sm mb-2">Room Code</p>
-        <div className="flex items-center justify-center gap-3">
-          <h1 className="font-display text-4xl font-bold tracking-widest bg-[#7B2FFF] text-white py-2 px-6 rounded-xl shadow-[0_0_20px_rgba(123,47,255,0.4)]">
+        <p className="text-[#F0EBFF] opacity-60 uppercase tracking-widest text-sm mb-2">Room Code</p>
+        <div className="flex items-center justify-center gap-2">
+          <h1 className="font-display text-3xl md:text-4xl font-bold tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
             {roomId}
           </h1>
           <button 
             onClick={() => navigator.clipboard.writeText(roomId)}
-            className="bg-white/10 hover:bg-[#39FF14] hover:text-black text-white p-3 rounded-xl transition-colors text-xl"
+            className="ml-2 bg-[#00FFC6]/10 hover:bg-[#00FFC6]/20 border border-[#00FFC6]/40 text-[#00FFC6] px-4 py-2 rounded-xl transition-colors font-bold uppercase tracking-wider text-sm shadow-[0_0_10px_rgba(0,255,198,0.2)]"
             title="Copy Room Code"
           >
-            📋
+            🔗
           </button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function LobbyPanel({
         <div>
           <h3 className="font-bold text-[#FF2D8B] mb-2">Voting Time</h3>
           <div className="flex gap-2 flex-wrap">
-            {[15, 20, 30, 40, 50].map(t => (
+            {[10, 15, 20, 30].map(t => (
               <Chip key={t} label={`${t}s`} active={settings.voting_time === t} onClick={() => onUpdateSettings({ voting_time: t })} disabled={!isHost} />
             ))}
           </div>

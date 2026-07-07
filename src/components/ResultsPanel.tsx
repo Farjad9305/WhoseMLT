@@ -40,14 +40,14 @@ export default function ResultsPanel({
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#7B2FFF', '#FF2D8B', '#39FF14', '#FFB830']
+        colors: ['#FF2D8B', '#7B2FFF', '#00FFC6', '#FFEA00']
       })
       confetti({
         particleCount: 5,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#7B2FFF', '#FF2D8B', '#39FF14', '#FFB830']
+        colors: ['#FF2D8B', '#7B2FFF', '#00FFC6', '#FFEA00']
       })
 
       if (Date.now() < end) {
@@ -78,25 +78,25 @@ export default function ResultsPanel({
     <div className="glass-panel p-6 h-full flex flex-col overflow-hidden">
       <div className="text-center mb-8 shrink-0">
         <span className="text-6xl block mb-4">🏆</span>
-        <h1 className="font-display font-bold text-4xl text-[#39FF14] glow-success">That's a wrap!</h1>
+        <h1 className="font-display font-bold text-4xl text-[#00FFC6] glow-success">That's a wrap!</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto pr-2 space-y-8">
         {/* Leaderboard */}
         <div>
-          <h2 className="font-bold text-[#FF2D8B] mb-4 text-xl">Leaderboard</h2>
+          <h2 className="font-bold text-[#7B2FFF] mb-4 text-xl">Leaderboard</h2>
           <div className="space-y-3">
             {leaderboard.map((p, i) => (
               <div key={p.id} className="relative bg-black/40 p-3 rounded-xl overflow-hidden flex items-center justify-between">
                 <div 
-                  className="absolute left-0 top-0 bottom-0 bg-[#7B2FFF]/30 z-0" 
+                  className="absolute left-0 top-0 bottom-0 bg-[#FF2D8B]/30 z-0" 
                   style={{ width: `${(p.totalVotes / maxLeaderboardVotes) * 100}%` }}
                 />
                 <div className="relative z-10 flex items-center gap-3">
                   <span className="w-6 text-center font-bold">
                     {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`}
                   </span>
-                  <span className="font-bold text-[#f0ebff]">{p.name}</span>
+                  <span className="font-bold text-[#FFFFFF]">{p.name}</span>
                 </div>
                 <span className="relative z-10 font-display font-bold text-lg">{p.totalVotes}</span>
               </div>
@@ -106,7 +106,7 @@ export default function ResultsPanel({
 
         {/* Round by Round */}
         <div>
-          <h2 className="font-bold text-[#FF2D8B] mb-4 text-xl">Round Breakdown</h2>
+          <h2 className="font-bold text-[#7B2FFF] mb-4 text-xl">Round Breakdown</h2>
           <div className="space-y-2">
             {questions.map((q, roundIdx) => {
               const roundVotes = allVotes.filter(v => v.round === roundIdx)
@@ -125,18 +125,18 @@ export default function ResultsPanel({
                     className="w-full text-left p-4 flex justify-between items-center hover:bg-black/40 transition-colors"
                   >
                     <div className="truncate pr-4 flex-1">
-                      <span className="text-[#b093ff] mr-2 text-sm">{roundIdx + 1}.</span>
+                      <span className="text-[#F0EBFF] mr-2 text-sm">{roundIdx + 1}.</span>
                       <span className="font-medium">{q.text}</span>
                     </div>
                     <div className="shrink-0 flex items-center gap-2">
                       {winners.length > 0 ? (
-                        <span className="text-[#39FF14] text-sm font-bold truncate max-w-[100px]">
+                        <span className="text-[#00FFC6] text-sm font-bold truncate max-w-[100px]">
                           {winners.map(w => w.name).join(', ')}
                         </span>
                       ) : (
                         <span className="text-white/30 text-sm italic">No votes</span>
                       )}
-                      <span className="text-[#b093ff]">{expandedRound === roundIdx ? '▲' : '▼'}</span>
+                      <span className="text-[#F0EBFF]">{expandedRound === roundIdx ? '▲' : '▼'}</span>
                     </div>
                   </button>
                   
@@ -164,16 +164,16 @@ export default function ResultsPanel({
         </div>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-[#b093ff]/20 shrink-0">
+      <div className="mt-6 pt-6 border-t border-[#F0EBFF]/20 shrink-0">
         {isHost ? (
           <button 
             onClick={onNewGame} 
-            className="w-full py-4 rounded-xl font-display font-bold text-xl transition-all bg-[#7B2FFF] text-white glow-primary hover:bg-[#FF2D8B] hover:shadow-[0_0_15px_rgba(255,45,139,0.5)]"
+            className="w-full py-4 rounded-xl font-display font-bold text-xl transition-all bg-[#FF2D8B] text-white glow-primary hover:bg-[#7B2FFF] hover:shadow-[0_0_15px_rgba(255,45,139,0.5)]"
           >
             NEW GAME — BACK TO LOBBY
           </button>
         ) : (
-          <div className="w-full py-4 text-center text-[#FFB830] font-bold italic">
+          <div className="w-full py-4 text-center text-[#FFEA00] font-bold italic">
             Waiting for host to start a new game...
           </div>
         )}

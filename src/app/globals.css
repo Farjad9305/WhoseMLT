@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-purple-base: #0c0818;
-  --color-purple-primary: #7B2FFF;
-  --color-pink-accent: #FF2D8B;
-  --color-text-primary: #f0ebff;
-  --color-text-muted: #b093ff;
-  --color-green-success: #39FF14;
-  --color-amber-warning: #FFB830;
+  --color-purple-base: #2B2D42;
+  --color-purple-primary: #FF2D8B;
+  --color-pink-accent: #7B2FFF;
+  --color-text-primary: #FFFFFF;
+  --color-text-muted: #F0EBFF;
+  --color-green-success: #00FFC6;
+  --color-amber-warning: #FFEA00;
   
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
@@ -15,17 +15,19 @@
 
 @layer base {
   body {
-    background-color: var(--color-purple-base);
+    background: linear-gradient(-45deg, #10062b, #450a41, #0c2c42, #47171e);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
     color: var(--color-text-primary);
   }
 }
 
 @layer utilities {
   .glass-panel {
-    @apply bg-[#b093ff]/5 border border-[#b093ff]/20 backdrop-blur-md rounded-2xl;
+    @apply bg-[#F0EBFF]/5 border border-[#F0EBFF]/20 backdrop-blur-md rounded-2xl;
   }
   .glass-button {
-    @apply bg-[#7B2FFF]/20 border border-[#7B2FFF]/50 hover:bg-[#7B2FFF]/40 transition-colors rounded-xl;
+    @apply bg-[#FF2D8B]/20 border border-[#FF2D8B]/50 hover:bg-[#FF2D8B]/40 transition-colors rounded-xl;
   }
   .glow-primary {
     box-shadow: 0 0 15px rgba(123, 47, 255, 0.5);

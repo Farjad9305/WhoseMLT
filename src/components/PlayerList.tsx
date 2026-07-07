@@ -20,13 +20,13 @@ export default function PlayerList({ players, hostId, currentId, onRename, onLea
 
   return (
     <div className="glass-panel p-4 flex flex-col h-full">
-      <h2 className="font-display font-bold text-xl mb-4 text-[#FF2D8B]">Players ({players.length})</h2>
+      <h2 className="font-display font-bold text-xl mb-4 text-[#7B2FFF]">Players ({players.length})</h2>
       <div className="flex-1 overflow-y-auto space-y-2 pr-2">
         {players.map(p => (
-          <div key={p.id} className={`p-2 rounded-lg flex items-center gap-2 ${p.id === currentId ? 'bg-[#7B2FFF]/20 border border-[#7B2FFF]/30' : 'bg-black/20'}`}>
+          <div key={p.id} className={`p-2 rounded-lg flex items-center gap-2 ${p.id === currentId ? 'bg-[#FF2D8B]/20 border border-[#FF2D8B]/30' : 'bg-black/20'}`}>
             {p.id === hostId && <span title="Host">👑</span>}
             <span className="truncate">{p.name}</span>
-            {p.id === currentId && <span className="text-xs text-[#b093ff] ml-auto">(You)</span>}
+            {p.id === currentId && <span className="text-xs text-[#F0EBFF] ml-auto">(You)</span>}
             {onKick && p.id !== currentId && p.id !== hostId && (
               <button 
                 onClick={() => onKick(p.id)} 
@@ -40,17 +40,17 @@ export default function PlayerList({ players, hostId, currentId, onRename, onLea
         ))}
       </div>
       {onRename && (
-        <div className="mt-4 pt-4 border-t border-[#b093ff]/20">
+        <div className="mt-4 pt-4 border-t border-[#F0EBFF]/20">
           {editing ? (
             <div className="flex flex-col gap-2">
-              <input type="text" value={name} onChange={e => setName(e.target.value)} className="bg-[#0c0818] border border-[#7B2FFF] rounded-lg px-2 py-1 outline-none text-sm" autoFocus />
+              <input type="text" value={name} onChange={e => setName(e.target.value)} className="bg-[#2B2D42] border border-[#FF2D8B] rounded-lg px-2 py-1 outline-none text-sm" autoFocus />
               <div className="flex gap-2">
-                <button onClick={handleSave} className="flex-1 bg-[#39FF14]/20 text-[#39FF14] rounded-lg py-1 text-sm font-bold">Save</button>
+                <button onClick={handleSave} className="flex-1 bg-[#00FFC6]/20 text-[#00FFC6] rounded-lg py-1 text-sm font-bold">Save</button>
                 <button onClick={() => setEditing(false)} className="flex-1 bg-white/10 rounded-lg py-1 text-sm">Cancel</button>
               </div>
             </div>
           ) : (
-            <button onClick={handleEdit} className="w-full glass-button py-2 text-sm text-[#b093ff]">
+            <button onClick={handleEdit} className="w-full glass-button py-2 text-sm text-[#F0EBFF]">
               Edit Name
             </button>
           )}

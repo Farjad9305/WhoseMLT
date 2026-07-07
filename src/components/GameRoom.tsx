@@ -37,11 +37,11 @@ export default function GameRoom({ roomId }: { roomId: string }) {
   const { voteCounts, myVotes, castVote } = useVotes(roomId, room?.round || 0, playerId, roomVotes)
 
   if (isLoading || !playerId) {
-    return <div className="min-h-screen flex items-center justify-center font-display text-2xl text-[#b093ff] animate-pulse">Loading Room...</div>
+    return <div className="min-h-screen flex items-center justify-center font-display text-2xl text-[#F0EBFF] animate-pulse">Loading Room...</div>
   }
 
   if (error || !room) {
-    return <div className="min-h-screen flex items-center justify-center font-display text-xl text-[#FF2D8B]">Error: {error || 'Room not found'}</div>
+    return <div className="min-h-screen flex items-center justify-center font-display text-xl text-[#7B2FFF]">Error: {error || 'Room not found'}</div>
   }
 
   const isHost = room.hostId === playerId
@@ -98,18 +98,18 @@ export default function GameRoom({ roomId }: { roomId: string }) {
   }
 
   return (
-    <div className="max-w-[1600px] mx-auto w-full h-screen md:max-h-[1100px] flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-[#050012] md:bg-transparent p-0 md:p-6">
+    <div className="max-w-[1600px] mx-auto w-full h-screen md:max-h-[1100px] flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-transparent p-0 md:p-6">
       
       {/* Mobile Tabs Header */}
       <div className="md:hidden flex items-center justify-between bg-black/40 p-3 shadow-md shrink-0">
         <div className="flex gap-2">
-          <button onClick={() => setActiveTab('players')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'players' ? 'bg-[#7B2FFF] text-white' : 'bg-white/5 text-white/50'}`}>
+          <button onClick={() => setActiveTab('players')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'players' ? 'bg-[#FF2D8B] text-white' : 'bg-white/5 text-white/50'}`}>
             Players ({players.length})
           </button>
-          <button onClick={() => setActiveTab('game')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'game' ? 'bg-[#FF2D8B] text-white' : 'bg-white/5 text-white/50'}`}>
+          <button onClick={() => setActiveTab('game')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'game' ? 'bg-[#7B2FFF] text-white' : 'bg-white/5 text-white/50'}`}>
             Game
           </button>
-          <button onClick={() => setActiveTab('chat')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'chat' ? 'bg-[#39FF14] text-black' : 'bg-white/5 text-white/50'}`}>
+          <button onClick={() => setActiveTab('chat')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'chat' ? 'bg-[#00FFC6] text-black' : 'bg-white/5 text-white/50'}`}>
             Chat
           </button>
         </div>
@@ -120,7 +120,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
       {/* Left Column - Players */}
       <div className={`w-full md:w-56 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'players' ? 'block' : 'hidden'}`}>
         <div className="md:hidden mb-4 flex justify-between items-center">
-           <h2 className="text-xl font-bold text-[#FF2D8B]">Players</h2>
+           <h2 className="text-xl font-bold text-[#7B2FFF]">Players</h2>
         </div>
         <PlayerList 
           players={players} 

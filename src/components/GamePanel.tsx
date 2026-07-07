@@ -34,28 +34,28 @@ export default function GamePanel({
       
       {/* Header Info */}
       <div className="flex justify-between items-center mb-6">
-        <span className="bg-black/40 px-4 py-1 rounded-full text-sm font-bold text-[#b093ff]">
+        <span className="bg-black/40 px-4 py-1 rounded-full text-sm font-bold text-[#F0EBFF]">
           Round {round + 1} / {totalRounds}
         </span>
-        <span className={`px-4 py-1 rounded-full text-sm font-bold animate-pulse ${isVoting ? 'bg-[#39FF14]/20 text-[#39FF14]' : 'bg-[#FFB830]/20 text-[#FFB830]'}`}>
+        <span className={`px-4 py-1 rounded-full text-sm font-bold animate-pulse ${isVoting ? 'bg-[#00FFC6]/20 text-[#00FFC6]' : 'bg-[#FFEA00]/20 text-[#FFEA00]'}`}>
           {isVoting ? 'VOTING OPEN' : 'GET READY'}
         </span>
       </div>
 
       {/* Question Card */}
       <div className="text-center my-8">
-        <p className="text-[#FF2D8B] font-bold text-lg mb-2">Whose most likely to...</p>
+        <p className="text-[#7B2FFF] font-bold text-lg mb-2">Whose most likely to...</p>
         <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight">
           {question?.text || 'Loading...'}
         </h2>
-        <p className="text-[#b093ff] text-xs mt-4">Source: {question?.src}</p>
+        <p className="text-[#F0EBFF] text-xs mt-4">Source: {question?.src}</p>
       </div>
 
       {/* Timer Bar */}
       {timeLeft !== null && (
         <div className="w-full bg-black/40 h-2 rounded-full mb-8 overflow-hidden">
            <div 
-             className={`h-full transition-all duration-1000 ease-linear ${timeLeft <= 5 ? 'bg-[#FF2D8B] glow-accent' : 'bg-[#7B2FFF] glow-primary'}`} 
+             className={`h-full transition-all duration-1000 ease-linear ${timeLeft <= 5 ? 'bg-[#7B2FFF] glow-accent' : 'bg-[#FF2D8B] glow-primary'}`} 
              style={{ width: `${Math.max(0, Math.min(100, (timeLeft / (isVoting ? 30 : 15)) * 100))}%` }} 
              // Note: max timer should ideally come from settings, hardcoded 30 for visual max width calculation fallback here, but using flex makes it robust
            />
@@ -63,8 +63,11 @@ export default function GamePanel({
       )}
 
       {/* Timer Text */}
-      <div className="text-center mb-8">
-         <span className={`font-display text-4xl font-bold ${timeLeft !== null && timeLeft <= 5 ? 'text-[#FF2D8B]' : 'text-white'}`}>
+      <div className="text-center mb-8 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+         {!isVoting && (
+           <span className="text-xl font-bold text-[#F0EBFF] opacity-80 uppercase tracking-widest">Voting begins in</span>
+         )}
+         <span className={`font-display text-4xl md:text-5xl font-bold ${timeLeft !== null && timeLeft <= 5 ? 'text-[#7B2FFF]' : 'text-white'}`}>
            {timeLeft !== null ? timeLeft : '--'}s
          </span>
       </div>
@@ -86,22 +89,22 @@ export default function GamePanel({
                 disabled={!isVoting}
                 className={`relative overflow-hidden p-4 rounded-xl transition-all text-left group
                   ${!isVoting ? 'opacity-70 cursor-not-allowed bg-black/20 border border-white/5' : 
-                    isSelected ? 'bg-[#7B2FFF]/30 border border-[#7B2FFF] glow-primary transform scale-[1.02]' : 
-                    'bg-black/40 border border-[#b093ff]/20 hover:border-[#b093ff]/60 hover:bg-black/60'}
+                    isSelected ? 'bg-[#FF2D8B]/30 border border-[#FF2D8B] glow-primary transform scale-[1.02]' : 
+                    'bg-black/40 border border-[#F0EBFF]/20 hover:border-[#F0EBFF]/60 hover:bg-black/60'}
                 `}
               >
                 {/* Progress Fill */}
                 <div 
-                  className="absolute left-0 top-0 bottom-0 bg-[#7B2FFF]/20 transition-all duration-500 z-0"
+                  className="absolute left-0 top-0 bottom-0 bg-[#FF2D8B]/20 transition-all duration-500 z-0"
                   style={{ width: `${percentage}%` }}
                 />
                 
                 {/* Content */}
                 <div className="relative z-10 flex justify-between items-center">
-                  <span className={`font-bold text-lg ${isSelected ? 'text-white' : 'text-[#f0ebff]'}`}>{p.name}</span>
+                  <span className={`font-bold text-lg ${isSelected ? 'text-white' : 'text-[#FFFFFF]'}`}>{p.name}</span>
                   <div className="flex items-center gap-2">
                     {votes > 0 && <span className="font-display font-bold text-xl">{votes}</span>}
-                    {isSelected && <span className="text-[#39FF14] text-xl">✓</span>}
+                    {isSelected && <span className="text-[#00FFC6] text-xl">✓</span>}
                   </div>
                 </div>
               </button>
