@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { PlayerData } from '@/lib/types'
 
-export default function PlayerList({ players, hostId, currentId, onRename, onLeave }: { players: PlayerData[], hostId: string, currentId: string, onRename?: (name: string) => void, onLeave: () => void }) {
+export default function PlayerList({ players, hostId, currentId, onRename, onLeave, onKick }: { players: PlayerData[], hostId: string, currentId: string, onRename?: (name: string) => void, onLeave: () => void, onKick?: (id: string) => void }) {
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState('')
 
@@ -27,6 +27,15 @@ export default function PlayerList({ players, hostId, currentId, onRename, onLea
             {p.id === hostId && <span title="Host">👑</span>}
             <span className="truncate">{p.name}</span>
             {p.id === currentId && <span className="text-xs text-[#b093ff] ml-auto">(You)</span>}
+            {onKick && p.id !== currentId && p.id !== hostId && (
+              <button 
+                onClick={() => onKick(p.id)} 
+                className="ml-auto text-red-500 hover:text-white hover:bg-red-500 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors border border-red-500/30"
+                title="Kick Player"
+              >
+                Kick
+              </button>
+            )}
           </div>
         ))}
       </div>

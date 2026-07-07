@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Syne, DM_Sans } from 'next/font/google'
 import './globals.css'
 
@@ -17,6 +17,12 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'WhoseMLT — Most Likely To',
   description: 'A real-time multiplayer party game.',
+}
+
+export const viewport: Viewport = {
+  width: 1280,
+  initialScale: 0.3,
+  maximumScale: 1,
 }
 
 export default function RootLayout({

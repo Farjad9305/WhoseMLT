@@ -35,10 +35,7 @@ export async function POST(request: Request) {
       where: { roomId }
     })
     
-    // Clear custom questions
-    await prisma.customQuestion.deleteMany({
-       where: { roomId }
-    })
+    // Custom questions are intentionally preserved so they can be reused across games
 
     await pusher.trigger(`room-${roomId}`, 'phase-changed', {
       phase: 'lobby',

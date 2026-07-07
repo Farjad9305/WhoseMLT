@@ -68,8 +68,14 @@ export function useRoom(roomId: string, playerId: string | null) {
       })
     })
     
-    channel.bind('player-left', ({ playerId }: { playerId: string }) => {
-      setPlayers(prev => prev.filter(p => p.id !== playerId))
+    channel.bind('player-left', ({ playerId: leftPlayerId }: { playerId: string }) => {
+      const currentPlayerId = sessionStorage.getItem('playerId')
+      if (leftPlayerId === currentPlayerId) {
+        sessionStorage.removeItem('roomId')
+        window.location.href = '/'
+      } else {
+        setPlayers(prev => prev.filter(p => p.id !== leftPlayerId))
+      }
     })
     
     channel.bind('player-renamed', (data: {id: string, name: string}) => {

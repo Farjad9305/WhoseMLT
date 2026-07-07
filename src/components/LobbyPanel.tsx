@@ -3,7 +3,7 @@ import { RoomSettings, Question } from '@/lib/types'
 import Toggle from './ui/Toggle'
 import Chip from './ui/Chip'
 
-const BUILT_IN_SETS = ['Classic', 'Chaos', 'Deep Cuts', 'Awkward', 'Polarizing', 'Dirty']
+const BUILT_IN_SETS = ['Classic', 'Chaos', 'Awkward', 'Polarizing', 'Dirty']
 
 export default function LobbyPanel({ 
   roomId, 
@@ -24,6 +24,9 @@ export default function LobbyPanel({
 }) {
   const [customQ, setCustomQ] = useState('')
   const [myCustomQs, setMyCustomQs] = useState<Question[]>([])
+  
+  const [editingQId, setEditingQId] = useState<string | null>(null)
+  const [editQText, setEditQText] = useState('')
 
   const fetchMyQs = async () => {
     const pid = sessionStorage.getItem('playerId')
@@ -38,6 +41,13 @@ export default function LobbyPanel({
   useEffect(() => {
     if (settings.allow_custom) fetchMyQs()
   }, [settings.allow_custom, roomId])
+
+  useEffect(() => {
+    if (isHost && settings.custom_only && customQTotal < settings.rounds) {
+      onUpdateSettings({ custom_only: false })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHost, settings.custom_only, customQTotal, settings.rounds])
 
   const handleAddQ = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,6 +72,23 @@ export default function LobbyPanel({
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ roomId, ownerId: pid, id })
     })
+    fetchMyQs()
+  }
+
+  const handleEditStart = (q: Question) => {
+    setEditingQId(q.id)
+    setEditQText(q.text)
+  }
+
+  const handleEditSave = async (id: string) => {
+    if (!editQText.trim()) return
+    const pid = sessionStorage.getItem('playerId')
+    await fetch('/api/questions', {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ id, ownerId: pid, text: editQText })
+    })
+    setEditingQId(null)
     fetchMyQs()
   }
 
@@ -250,9 +277,22 @@ export default function LobbyPanel({
             {myCustomQs.length > 0 && (
               <div className="space-y-2 max-h-32 overflow-y-auto pr-2">
                 {myCustomQs.map(q => (
-                  <div key={q.id} className="flex justify-between items-center bg-black/20 p-2 rounded-lg text-sm">
-                    <span className="truncate flex-1">...{q.text}</span>
-                    <button onClick={() => handleDeleteQ(q.id)} className="text-[#FF2D8B] hover:text-white px-2">✕</button>
+                  <div key={q.id} className="flex flex-col bg-black/20 p-2 rounded-lg text-sm gap-2">
+                    {editingQId === q.id ? (
+                      <div className="flex gap-2">
+                        <input type="text" value={editQText} onChange={e => setEditQText(e.target.value)} className="flex-1 bg-[#0c0818] border border-[#b093ff]/30 rounded-lg px-2 py-1 outline-none" autoFocus />
+                        <button onClick={() => handleEditSave(q.id)} className="text-[#39FF14] hover:text-white px-2 font-bold">✓</button>
+                        <button onClick={() => setEditingQId(null)} className="text-white/50 hover:text-white px-2">✕</button>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between items-center w-full gap-2">
+                        <span className="truncate flex-1" title={q.text}>...{q.text}</span>
+                        <div className="flex gap-2 shrink-0">
+                          <button onClick={() => handleEditStart(q)} className="text-[#b093ff] hover:text-white" title="Edit">✏️</button>
+                          <button onClick={() => handleDeleteQ(q.id)} className="text-[#FF2D8B] hover:text-white" title="Delete">✕</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

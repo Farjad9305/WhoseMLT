@@ -23,10 +23,22 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ r
     // Delete player
     await prisma.player.delete({ where: { id: playerId } }).catch(() => null)
 
+    // Delete player's custom questions
+    const deletedQs = await prisma.customQuestion.deleteMany({
+      where: { roomId, ownerId: playerId }
+    }).catch(() => ({ count: 0 }))
+
     const remainingPlayers = room.players.filter(p => p.id !== playerId)
     
     // Broadcast player-left
     await pusher.trigger(`room-${roomId}`, 'player-left', { playerId })
+
+    if (deletedQs && deletedQs.count > 0 && remainingPlayers.length > 0) {
+      const count = await prisma.customQuestion.count({ where: { roomId } })
+      await pusher.trigger(`room-${roomId}`, 'room-updated', {
+        settings: { customQTotal: count }
+      })
+    }
 
     // If room is empty, delete it
     if (remainingPlayers.length === 0) {

@@ -88,6 +88,15 @@ export default function GameRoom({ roomId }: { roomId: string }) {
     router.push('/')
   }
 
+  const handleKick = async (id: string) => {
+    if (!isHost) return
+    await fetch(`/api/players/${roomId}/leave`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId: id })
+    })
+  }
+
   return (
     <div className="max-w-[1600px] mx-auto h-screen flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-[#050012] md:bg-transparent p-0 md:p-6">
       
@@ -109,7 +118,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
       {/* Desktop Header / Top Right actions (Removed explicit leave button) */}
       
       {/* Left Column - Players */}
-      <div className={`w-full md:w-64 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'players' ? 'block' : 'hidden'}`}>
+      <div className={`w-full md:w-56 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'players' ? 'block' : 'hidden'}`}>
         <div className="md:hidden mb-4 flex justify-between items-center">
            <h2 className="text-xl font-bold text-[#FF2D8B]">Players</h2>
         </div>
@@ -119,6 +128,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
           currentId={playerId}
           onRename={room.phase === 'lobby' ? handleRename : undefined}
           onLeave={handleLeaveRoom}
+          onKick={isHost ? handleKick : undefined}
         />
       </div>
 
@@ -164,7 +174,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
       </div>
 
       {/* Right Column - Chat */}
-      <div className={`w-full md:w-80 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'chat' ? 'block' : 'hidden'}`}>
+      <div className={`w-full md:w-72 shrink-0 h-full md:block p-4 md:p-0 ${activeTab === 'chat' ? 'block' : 'hidden'}`}>
         <ChatPanel 
           roomId={roomId}
           messages={chat} 
