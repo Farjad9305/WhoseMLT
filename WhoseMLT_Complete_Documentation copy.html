@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WhoseMLT — Complete Project Documentation</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    font-size: 14px;
+  }
+  h1 { color: #7B2FFF; border-bottom: 3px solid #7B2FFF; padding-bottom: 10px; font-size: 28px; }
+  h2 { color: #FF2D8B; margin-top: 40px; border-bottom: 2px solid #eee; padding-bottom: 8px; font-size: 22px; }
+  h3 { color: #333; margin-top: 25px; font-size: 18px; }
+  h4 { color: #555; font-size: 15px; }
+  blockquote {
+    background: #f3f0ff;
+    border-left: 4px solid #7B2FFF;
+    padding: 12px 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  pre {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 13px;
+  }
+  th {
+    background: #7B2FFF;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+  }
+  tr:nth-child(even) { background: #f9f7ff; }
+  hr { border: none; border-top: 2px solid #eee; margin: 30px 0; }
+  a { color: #7B2FFF; }
+  @media print {
+    body { font-size: 11px; padding: 20px; }
+    pre { font-size: 10px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; page-break-before: always; }
+    h2:first-of-type { page-break-before: avoid; }
+    table { font-size: 10px; }
+    blockquote { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<h1>WhoseMLT — Complete Project Documentation</h1>
+<blockquote>
+<p><strong>A Beginner&#39;s Guide to Understanding Every Single File, How They Work Together, and How to Modify Them</strong></p>
+</blockquote>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-what-is-whosemlt">What is WhoseMLT?</a></li>
+<li><a href="#2-the-big-picture">The Big Picture — How a Web App Works</a></li>
+<li><a href="#3-technologies-used">Technologies Used (and Why)</a></li>
+<li><a href="#4-project-file-map">Project File Map</a></li>
+<li><a href="#5-the-database-layer">The Database Layer — Where Data Lives</a></li>
+<li><a href="#6-the-backend-layer">The Backend Layer — The Brain</a></li>
+<li><a href="#7-the-real-time-layer">The Real-Time Layer — The Nervous System</a></li>
+<li><a href="#8-the-frontend-layer">The Frontend Layer — What Players See</a></li>
+<li><a href="#9-how-everything-connects">How Everything Connects</a></li>
+<li><a href="#10-the-complete-game-flow">The Complete Game Flow</a></li>
+<li><a href="#11-how-to-modify-things">How to Modify Things</a></li>
+<li><a href="#12-configuration-files">Configuration Files</a></li>
+<li><a href="#13-glossary-of-terms">Glossary of Terms</a></li>
+</ol>
+<hr>
+<h2>1. What is WhoseMLT?</h2>
+<p>WhoseMLT (short for &quot;Whose Most Likely To&quot;) is a <strong>real-time multiplayer party game</strong> that runs entirely in a web browser. One person creates a room, shares a code with friends, and everyone votes on fun &quot;Most Likely To...&quot; questions like <em>&quot;Who is most likely to survive a zombie apocalypse?&quot;</em></p>
+<h3>Key Features:</h3>
+<ul>
+<li><strong>Real-time multiplayer</strong>: Everyone sees votes, chat messages, and game events instantly — no page refreshing needed.</li>
+<li><strong>Room-based</strong>: Each game happens in a private room protected by a password.</li>
+<li><strong>Host controls</strong>: The room creator (host) controls game settings like number of rounds, voting time, and question sets.</li>
+<li><strong>Live chat</strong>: Players can chat with each other during the game.</li>
+<li><strong>Custom questions</strong>: Players can add their own &quot;Most Likely To&quot; questions.</li>
+<li><strong>Kick players</strong>: The host can remove disruptive players.</li>
+<li><strong>Results &amp; confetti</strong>: At the end, a leaderboard shows who got voted the most, complete with confetti animations.</li>
+</ul>
+<hr>
+<h2>2. The Big Picture — How a Web App Works</h2>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: Think of a web application like a restaurant.</p>
+<ul>
+<li>The <strong>Frontend</strong> is the dining area — the menus, tables, decorations, and everything the customer (user) sees and touches.</li>
+<li>The <strong>Backend</strong> is the kitchen — where the actual cooking (logic and processing) happens. Customers never see the kitchen.</li>
+<li>The <strong>Database</strong> is the pantry/fridge — where all the ingredients (data) are stored permanently so the kitchen can use them whenever needed.</li>
+<li>The <strong>Real-time layer</strong> (Pusher) is like the waiter who runs back and forth between the kitchen and ALL the tables simultaneously, instantly telling every table when their food is ready.</li>
+</ul>
+</blockquote>
+<p>In our project:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it does</th>
+<th>Files involved</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Frontend</strong></td>
+<td>What players see and click on</td>
+<td>All <code>.tsx</code> files in <code>src/components/</code> and <code>src/app/</code></td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Processes actions (create room, vote, etc.)</td>
+<td>All <code>route.ts</code> files inside <code>src/app/api/</code></td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>Stores rooms, players, votes, messages permanently</td>
+<td><code>prisma/schema.prisma</code> and <code>src/lib/prisma.ts</code></td>
+</tr>
+<tr>
+<td><strong>Real-time</strong></td>
+<td>Pushes live updates to all players instantly</td>
+<td><code>src/lib/pusher.ts</code>, <code>src/lib/pusher-client.ts</code>, <code>src/hooks/useRoom.ts</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Technologies Used (and Why)</h2>
+<h3>Core Framework: <strong>Next.js</strong> (version 15)</h3>
+<ul>
+<li><strong>File type</strong>: The entire project structure follows Next.js conventions.</li>
+<li><strong>What it is</strong>: Next.js is a <strong>framework</strong> (a pre-built skeleton that gives you a head start) built on top of React. Think of React as LEGO bricks, and Next.js as a LEGO instruction manual that tells you how to arrange those bricks into a house.</li>
+<li><strong>Why we use it</strong>: Next.js lets us write BOTH the frontend (what users see) AND the backend (the server logic) in the SAME project, in the SAME programming language (TypeScript). Without it, we would need two completely separate projects — one for the website and one for the server.</li>
+<li><strong>Special feature — &quot;App Router&quot;</strong>: Next.js uses a system where the <em>folder structure</em> of your files automatically becomes the URL structure of your website. For example, a file at <code>src/app/room/[roomId]/page.tsx</code> automatically becomes the URL <code>yourwebsite.com/room/ABC123</code>.</li>
+</ul>
+<h3>Programming Language: <strong>TypeScript</strong> (<code>.ts</code> and <code>.tsx</code> files)</h3>
+<ul>
+<li><strong>What it is</strong>: TypeScript is JavaScript with <strong>type safety</strong>. JavaScript is the language that makes websites interactive (buttons that click, animations that move, etc.). TypeScript adds a layer of protection on top — it forces you to declare what <em>type</em> of data each variable holds (is it a number? a word? a list?).</li>
+<li><strong>Why we use it</strong>: It catches mistakes early. If you accidentally try to use a player&#39;s name as a number, TypeScript will scream at you <em>before</em> the code even runs, saving you hours of debugging.</li>
+<li><strong><code>.ts</code> vs <code>.tsx</code></strong>: Files ending in <code>.ts</code> contain pure logic (no visual elements). Files ending in <code>.tsx</code> contain logic <em>mixed with</em> HTML-like visual code called <strong>JSX</strong> (JavaScript XML). JSX is a syntax that lets you write HTML directly inside JavaScript, like <code>&lt;button&gt;Click me&lt;/button&gt;</code>.</li>
+</ul>
+<h3>UI Library: <strong>React</strong> (version 19)</h3>
+<ul>
+<li><strong>What it is</strong>: React is a library (a collection of pre-written code) for building user interfaces. It breaks your UI into reusable <strong>components</strong> — independent, self-contained pieces of the screen.</li>
+<li><strong>Why we use it</strong>: Instead of writing one massive HTML file for the entire game, we break it into small, manageable pieces: <code>PlayerList</code>, <code>ChatPanel</code>, <code>GamePanel</code>, etc. Each component manages its own logic and appearance. If we need to change how the chat looks, we only touch <code>ChatPanel.tsx</code> — nothing else breaks.</li>
+</ul>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: Components are like LEGO pieces. A <code>PlayerList</code> is one LEGO piece, a <code>ChatPanel</code> is another. You snap them together to build the full game screen (<code>GameRoom</code>). If one piece breaks, you just fix that one piece without taking apart the whole thing.</p>
+</blockquote>
+<h3>Styling: <strong>Tailwind CSS</strong> (version 4)</h3>
+<ul>
+<li><strong>File type</strong>: Utility classes used directly in <code>.tsx</code> files, with base styles defined in <code>globals.css</code>.</li>
+<li><strong>What it is</strong>: Tailwind CSS is a <strong>utility-first CSS framework</strong>. Instead of writing traditional CSS in a separate file (like <code>color: red; font-size: 20px;</code>), you apply tiny pre-built class names directly on HTML elements (like <code>text-red-500 text-xl</code>).</li>
+<li><strong>Why we use it</strong>: It&#39;s incredibly fast. You never leave your component file to style something. Every visual change is made right where the HTML is written.</li>
+<li><strong>Example</strong>: <code>className=&quot;bg-black/40 text-white font-bold rounded-xl px-4 py-2&quot;</code> means: <em>dark semi-transparent background, white text, bold font, rounded corners, horizontal padding of 1rem, vertical padding of 0.5rem</em>.</li>
+</ul>
+<h3>Database: <strong>PostgreSQL</strong> + <strong>Prisma ORM</strong></h3>
+<ul>
+<li><strong>PostgreSQL</strong>: A powerful, free, open-source <strong>relational database</strong> (a database that stores data in tables with rows and columns, like an Excel spreadsheet). Our data (rooms, players, votes, chat messages) lives here permanently.</li>
+<li><strong>Prisma ORM</strong>: An <strong>ORM</strong> (Object-Relational Mapper) is a translator between your TypeScript code and the database. Instead of writing raw database queries in SQL (a special database language like <code>SELECT * FROM rooms WHERE id = &#39;ABC123&#39;</code>), Prisma lets you write clean TypeScript code like <code>prisma.room.findUnique({ where: { id: &#39;ABC123&#39; } })</code>. It translates your TypeScript into SQL behind the scenes.</li>
+<li><strong>File type</strong>: Prisma uses a special <code>.prisma</code> file format for defining the database structure.</li>
+</ul>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: PostgreSQL is a massive filing cabinet. Prisma is the secretary who knows exactly which drawer to open and what form to fill out. You just tell the secretary &quot;find me the room with code ABC123&quot; and she handles all the paperwork.</p>
+</blockquote>
+<h3>Real-Time Communication: <strong>Pusher</strong></h3>
+<ul>
+<li><strong>What it is</strong>: Pusher is a third-party service that enables <strong>WebSocket</strong> connections. WebSockets are a special kind of internet connection that stays &quot;open&quot; between the user&#39;s browser and the server, allowing the server to <em>push</em> data to the browser instantly without the browser having to ask for it.</li>
+<li><strong>Why we use it</strong>: In a normal website, the browser has to keep asking the server &quot;anything new? anything new?&quot; (this is called <strong>polling</strong>). With Pusher, the server can shout &quot;HEY! Someone just voted!&quot; and every player&#39;s browser hears it immediately. This is what makes the game feel &quot;live&quot;.</li>
+</ul>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: Normal websites work like sending letters — you send a question, wait for a reply. Pusher works like a phone call — once connected, both sides can talk instantly, anytime.</p>
+</blockquote>
+<h3>Additional Libraries:</h3>
+<ul>
+<li><strong><code>canvas-confetti</code></strong>: Creates the confetti explosion animation on the results screen.</li>
+<li><strong><code>bcrypt-style hashing</code></strong>: Used to securely scramble room passwords so they can&#39;t be read if someone hacks the database.</li>
+</ul>
+<hr>
+<h2>4. Project File Map</h2>
+<p>Here is every file in the project, organized by folder, with its purpose:</p>
+<pre><code>WhoseMLT/
+│
+├── 📄 package.json              ← Project manifest (lists all dependencies)
+├── 📄 tsconfig.json             ← TypeScript configuration
+├── 📄 next.config.ts            ← Next.js configuration
+├── 📄 postcss.config.mjs        ← PostCSS config (needed by Tailwind)
+├── 📄 eslint.config.mjs         ← Code style checker configuration
+├── 📄 .env                      ← Secret keys (database URL, Pusher keys)
+│
+├── 📁 prisma/                   ← DATABASE LAYER
+│   └── 📄 schema.prisma         ← Database table definitions
+│
+├── 📁 src/                      ← ALL SOURCE CODE
+│   │
+│   ├── 📁 app/                  ← PAGES + BACKEND API ROUTES
+│   │   ├── 📄 layout.tsx        ← Master page wrapper (fonts, colors, viewport)
+│   │   ├── 📄 globals.css       ← Global CSS styles (gradient background, glass effects)
+│   │   ├── 📄 page.tsx          ← Home page (renders LandingScreen)
+│   │   │
+│   │   ├── 📁 room/[roomId]/
+│   │   │   └── 📄 page.tsx      ← Game room page (renders GameRoom)
+│   │   │
+│   │   └── 📁 api/              ← BACKEND API ROUTES (the &quot;kitchen&quot;)
+│   │       ├── 📁 rooms/        ← Create room, fetch room, update settings
+│   │       ├── 📁 join/         ← Join an existing room
+│   │       ├── 📁 players/      ← Rename player, kick/leave room
+│   │       ├── 📁 game/         ← Start game, advance phases, reset game
+│   │       ├── 📁 vote/         ← Cast a vote
+│   │       ├── 📁 votes/        ← Fetch all votes for a round
+│   │       ├── 📁 chat/         ← Send/fetch chat messages + typing indicators
+│   │       └── 📁 questions/    ← Add/edit/delete custom questions
+│   │
+│   ├── 📁 components/           ← FRONTEND UI PIECES (the &quot;dining area&quot;)
+│   │   ├── 📄 LandingScreen.tsx ← Home screen (create/join room forms)
+│   │   ├── 📄 GameRoom.tsx      ← Main game layout (3-column structure)
+│   │   ├── 📄 LobbyPanel.tsx    ← Lobby settings (rounds, sets, custom Qs)
+│   │   ├── 📄 GamePanel.tsx     ← Voting screen (question + player cards)
+│   │   ├── 📄 ResultsPanel.tsx  ← End-of-game leaderboard + confetti
+│   │   ├── 📄 PlayerList.tsx    ← Left sidebar (player names, edit, kick)
+│   │   ├── 📄 ChatPanel.tsx     ← Right sidebar (live chat)
+│   │   └── 📁 ui/
+│   │       ├── 📄 Chip.tsx      ← Small selectable pill button (for &quot;10s&quot;, &quot;Classic&quot;, etc.)
+│   │       └── 📄 Toggle.tsx    ← On/off switch component
+│   │
+│   ├── 📁 hooks/                ← CONNECTORS (wires between frontend and backend)
+│   │   ├── 📄 useRoom.ts       ← Fetches room data + listens for real-time updates
+│   │   └── 📄 useVotes.ts      ← Manages vote state + sends vote API calls
+│   │
+│   ├── 📁 lib/                  ← SHARED UTILITIES (used by both frontend and backend)
+│   │   ├── 📄 types.ts         ← TypeScript type definitions (data shapes)
+│   │   ├── 📄 game-logic.ts    ← Question sets + game helper functions
+│   │   ├── 📄 prisma.ts        ← Database connection (Prisma client singleton)
+│   │   ├── 📄 pusher.ts        ← Server-side Pusher (sends events TO browsers)
+│   │   ├── 📄 pusher-client.ts ← Client-side Pusher (receives events IN browsers)
+│   │   └── 📄 sounds.ts        ← Sound effect utilities (currently unused)
+│   │
+│   └── 📁 generated/            ← AUTO-GENERATED Prisma client code (don&#39;t touch!)
+</code></pre>
+<hr>
+<h2>5. The Database Layer — Where Data Lives</h2>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: The database is like a school&#39;s filing system. There&#39;s a cabinet for &quot;Rooms&quot;, another for &quot;Players&quot;, another for &quot;Votes&quot;, etc. Each cabinet has folders (rows) with specific information written on forms (columns).</p>
+</blockquote>
+<h3>File: <code>prisma/schema.prisma</code></h3>
+<ul>
+<li><strong>File type</strong>: <code>.prisma</code> — a special format understood only by Prisma ORM. It&#39;s not TypeScript or JavaScript.</li>
+<li><strong>Purpose</strong>: This file is the <strong>blueprint</strong> of your entire database. It defines what tables exist, what columns each table has, and how tables relate to each other.</li>
+<li><strong>When to modify</strong>: Whenever you want to add a new type of data to the game (e.g., adding player avatars, or a &quot;reactions&quot; feature).</li>
+</ul>
+<h4>The Tables (called &quot;Models&quot; in Prisma):</h4>
+<p><strong>1. Room</strong> — Stores each game room.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>What it stores</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>String</td>
+<td>The 8-character room code (e.g., &quot;S2UW3965&quot;)</td>
+</tr>
+<tr>
+<td><code>passwordHash</code></td>
+<td>String</td>
+<td>The scrambled (hashed) version of the room password</td>
+</tr>
+<tr>
+<td><code>hostId</code></td>
+<td>String</td>
+<td>The player ID of whoever created the room</td>
+</tr>
+<tr>
+<td><code>hostName</code></td>
+<td>String</td>
+<td>The display name of the host</td>
+</tr>
+<tr>
+<td><code>phase</code></td>
+<td>String</td>
+<td>Current game state: &quot;lobby&quot;, &quot;pre_round&quot;, &quot;voting&quot;, or &quot;game_end&quot;</td>
+</tr>
+<tr>
+<td><code>round</code></td>
+<td>Int</td>
+<td>Which round the game is currently on (starts at 0)</td>
+</tr>
+<tr>
+<td><code>phaseStart</code></td>
+<td>DateTime?</td>
+<td>When the current phase started (used to calculate the countdown timer). The <code>?</code> means this field is optional — it can be empty.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Int</td>
+<td>A counter that goes up by 1 every time the phase changes. Used to prevent duplicate phase advances.</td>
+</tr>
+<tr>
+<td><code>settings</code></td>
+<td>Json</td>
+<td>All game settings stored as a single JSON blob (voting time, rounds, sets, etc.)</td>
+</tr>
+<tr>
+<td><code>questions</code></td>
+<td>Json</td>
+<td>The list of questions selected for this game, stored as JSON</td>
+</tr>
+<tr>
+<td><code>createdAt</code></td>
+<td>DateTime</td>
+<td>When the room was created</td>
+</tr>
+</tbody></table>
+<p><strong>Relationships</strong>: A Room has many Players, many Votes, many ChatMessages, and many CustomQuestions. This is indicated by <code>Player[]</code>, <code>Vote[]</code>, etc. in the schema.</p>
+<p><strong>2. Player</strong> — Stores each player in a room.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>What it stores</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>String</td>
+<td>A unique player ID (generated when they join)</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String</td>
+<td>Their display name</td>
+</tr>
+<tr>
+<td><code>roomId</code></td>
+<td>String</td>
+<td>Which room they belong to</td>
+</tr>
+<tr>
+<td><code>joinedAt</code></td>
+<td>DateTime</td>
+<td>When they joined</td>
+</tr>
+</tbody></table>
+<p><strong><code>onDelete: Cascade</code></strong>: This is a safety rule. It means: &quot;If the Room is deleted, automatically delete all Players in that room too.&quot; Without this, you&#39;d have orphan player records floating around in the database with no room to belong to.</p>
+<p><strong>3. Vote</strong> — Stores each vote cast during the game.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>What it stores</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>String</td>
+<td>Unique vote ID (auto-generated)</td>
+</tr>
+<tr>
+<td><code>roomId</code></td>
+<td>String</td>
+<td>Which room this vote belongs to</td>
+</tr>
+<tr>
+<td><code>round</code></td>
+<td>Int</td>
+<td>Which round this vote was cast in</td>
+</tr>
+<tr>
+<td><code>voterId</code></td>
+<td>String</td>
+<td>Who cast the vote</td>
+</tr>
+<tr>
+<td><code>targetId</code></td>
+<td>String</td>
+<td>Who they voted for</td>
+</tr>
+</tbody></table>
+<p><strong><code>@@unique([roomId, round, voterId, targetId])</code></strong>: This is a <strong>uniqueness constraint</strong>. It means: &quot;In a given room, in a given round, a voter can only vote for a specific target ONCE.&quot; This prevents someone from voting for the same person 100 times.</p>
+<p><strong>4. ChatMessage</strong> — Stores chat messages.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>What it stores</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>String</td>
+<td>Unique message ID</td>
+</tr>
+<tr>
+<td><code>roomId</code></td>
+<td>String</td>
+<td>Which room</td>
+</tr>
+<tr>
+<td><code>pid</code></td>
+<td>String?</td>
+<td>Player ID of who sent it (null for system messages)</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>String?</td>
+<td>Display name of sender</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>String</td>
+<td>The actual message text</td>
+</tr>
+<tr>
+<td><code>isSystem</code></td>
+<td>Boolean</td>
+<td><code>true</code> if it&#39;s a system message like &quot;Player joined the room&quot;</td>
+</tr>
+<tr>
+<td><code>sentAt</code></td>
+<td>DateTime</td>
+<td>When it was sent</td>
+</tr>
+</tbody></table>
+<p><strong>5. CustomQuestion</strong> — Stores player-created questions.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>What it stores</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td>String</td>
+<td>Unique question ID</td>
+</tr>
+<tr>
+<td><code>roomId</code></td>
+<td>String</td>
+<td>Which room</td>
+</tr>
+<tr>
+<td><code>ownerId</code></td>
+<td>String</td>
+<td>Which player created it</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>String</td>
+<td>The question text</td>
+</tr>
+</tbody></table>
+<h3>File: <code>src/lib/prisma.ts</code></h3>
+<ul>
+<li><strong>File type</strong>: <code>.ts</code> (TypeScript)</li>
+<li><strong>Purpose</strong>: This is the <strong>database connector</strong>. It creates a single, shared connection to the database that every backend API route uses.</li>
+<li><strong>Why it&#39;s written this way</strong>: During development, Next.js restarts your code frequently (called &quot;hot reloading&quot;). Without this file&#39;s special singleton pattern (storing the connection on the global object), every restart would create a NEW database connection, eventually overwhelming the database with too many open connections. This file ensures only ONE connection ever exists.</li>
+<li><strong>When to modify</strong>: Almost never. This file is &quot;set it and forget it.&quot;</li>
+</ul>
+<h3>File: <code>.env</code></h3>
+<ul>
+<li><strong>File type</strong>: Environment file (no extension, just <code>.env</code>)</li>
+<li><strong>Purpose</strong>: Stores <strong>secret keys</strong> and <strong>configuration values</strong> that should NEVER be committed to GitHub (like your database URL, Pusher API keys, etc.).</li>
+<li><strong>Contains</strong>:<ul>
+<li><code>DATABASE_URL</code> — The full connection string to your PostgreSQL database.</li>
+<li><code>PUSHER_APP_ID</code>, <code>PUSHER_SECRET</code> — Secret keys for the Pusher service (server-side only).</li>
+<li><code>NEXT_PUBLIC_PUSHER_KEY</code>, <code>NEXT_PUBLIC_PUSHER_CLUSTER</code> — Public keys for Pusher (the <code>NEXT_PUBLIC_</code> prefix means these are safe to expose to the browser).</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>6. The Backend Layer — The Brain</h2>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: The backend API routes are like the kitchen staff at a restaurant. Each route is a different cook with a specific specialty. The &quot;rooms&quot; cook only knows how to create and manage rooms. The &quot;vote&quot; cook only knows how to process votes. A customer (the frontend) sends an order (an HTTP request) to the right cook, and the cook prepares the response.</p>
+</blockquote>
+<p>All backend files live inside <code>src/app/api/</code>. In Next.js, any file named <code>route.ts</code> inside the <code>api/</code> folder automatically becomes an <strong>API endpoint</strong> (a URL that the frontend can send requests to).</p>
+<h3>What is an API Endpoint?</h3>
+<p>An <strong>API endpoint</strong> is a specific URL on your server that accepts requests and sends back responses. Think of it like a drive-through window — the car (frontend) pulls up, shouts an order through the speaker (sends a request), and the window hands back food (response data).</p>
+<p>Each endpoint responds to specific <strong>HTTP methods</strong> (types of requests):</p>
+<ul>
+<li><strong>GET</strong>: &quot;Give me data&quot; (like reading a book)</li>
+<li><strong>POST</strong>: &quot;Create something new&quot; (like writing a new page)</li>
+<li><strong>PATCH</strong>: &quot;Update something existing&quot; (like editing a page)</li>
+<li><strong>DELETE</strong>: &quot;Remove something&quot; (like tearing out a page)</li>
+</ul>
+<h3>File: <code>src/app/api/rooms/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/rooms</code></li>
+<li><strong>Purpose</strong>: <strong>Creates a new game room.</strong></li>
+<li><strong>What it does step-by-step</strong>:<ol>
+<li>Receives the host&#39;s display name and chosen password from the frontend.</li>
+<li>Validates that the name is at least 2 characters and password at least 3.</li>
+<li>Generates a unique 8-character room code (e.g., &quot;S2UW3965&quot;) using <code>generateRoomId()</code> from <code>game-logic.ts</code>.</li>
+<li>Generates a unique player ID for the host using <code>generatePlayerId()</code>.</li>
+<li>Hashes (scrambles) the password using <code>hashPassword()</code> so the real password is never stored in the database.</li>
+<li>Creates the Room in the database with default settings (30s voting time, 10 rounds, &quot;Classic&quot; set selected).</li>
+<li>Also creates the host as the first Player in that room.</li>
+<li>Also creates a system chat message: &quot;PlayerName created the room ✨&quot;.</li>
+<li>Sends back the room data and the host&#39;s player ID.</li>
+</ol>
+</li>
+</ul>
+<h3>File: <code>src/app/api/rooms/[roomId]/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>GET /api/rooms/ABC123</code> and <code>PATCH /api/rooms/ABC123</code></li>
+<li><strong>The <code>[roomId]</code> is a dynamic segment</strong> — it&#39;s a placeholder. Whatever value appears in the URL becomes accessible as a variable. So <code>/api/rooms/S2UW3965</code> means <code>roomId = &quot;S2UW3965&quot;</code>.</li>
+<li><strong>GET</strong>: Fetches all data about a specific room (room details, players, settings).</li>
+<li><strong>PATCH</strong>: Updates the room&#39;s settings. Only the host can do this. After updating, it broadcasts the changes to all players via Pusher so their screens update instantly.</li>
+</ul>
+<h3>File: <code>src/app/api/join/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/join</code></li>
+<li><strong>Purpose</strong>: <strong>Lets a player join an existing room.</strong></li>
+<li><strong>What it does</strong>:<ol>
+<li>Receives the player&#39;s name, room ID, and password.</li>
+<li>Looks up the room in the database.</li>
+<li>Checks if the room exists, if the password matches (by hashing the input and comparing it to the stored hash), and if the game hasn&#39;t already ended.</li>
+<li>Creates a new Player record in the database.</li>
+<li>Creates a system chat message: &quot;PlayerName joined the room&quot;.</li>
+<li><strong>Broadcasts via Pusher</strong>: Sends a <code>player-joined</code> event to the room channel so ALL existing players&#39; screens instantly show the new player in their player list.</li>
+<li>Returns the room data and the new player&#39;s ID.</li>
+</ol>
+</li>
+</ul>
+<h3>File: <code>src/app/api/players/[roomId]/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>PATCH /api/players/ABC123</code></li>
+<li><strong>Purpose</strong>: <strong>Renames a player.</strong></li>
+<li><strong>What it does</strong>:<ol>
+<li>Receives the player ID and new name.</li>
+<li>Updates the player&#39;s name in the database.</li>
+<li>If the player is the host, also updates the room&#39;s <code>hostName</code>.</li>
+<li>Broadcasts a <code>player-renamed</code> event via Pusher so everyone sees the new name immediately.</li>
+</ol>
+</li>
+</ul>
+<h3>File: <code>src/app/api/players/[roomId]/leave/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>DELETE /api/players/ABC123/leave</code></li>
+<li><strong>Purpose</strong>: <strong>Handles a player leaving or being kicked.</strong></li>
+<li><strong>What it does</strong>:<ol>
+<li>Deletes the player from the database.</li>
+<li>Deletes all custom questions that player had added.</li>
+<li>Broadcasts a <code>player-left</code> event via Pusher. On the kicked player&#39;s browser, this event triggers an automatic redirect to the home screen.</li>
+<li>If the player who left had custom questions, broadcasts an updated <code>customQTotal</code> count so the lobby settings update.</li>
+<li>If the room is now empty, deletes the entire room.</li>
+<li>If the person who left was the host, promotes the next player to be the new host (<strong>host migration</strong>).</li>
+</ol>
+</li>
+</ul>
+<h3>File: <code>src/app/api/game/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/game</code> (start game) and <code>PATCH /api/game</code> (advance phase)</li>
+<li><strong>Purpose</strong>: <strong>Controls the game&#39;s lifecycle</strong> — starting the game and advancing through phases.</li>
+</ul>
+<p><strong>POST (Start Game)</strong>:</p>
+<ol>
+<li>Only the host can trigger this.</li>
+<li>Calls <code>selectQuestions()</code> from <code>game-logic.ts</code> to pick the right number of questions from the selected sets.</li>
+<li>Saves the selected questions to the room.</li>
+<li>Changes the room&#39;s phase from &quot;lobby&quot; to &quot;pre_round&quot;.</li>
+<li>Sets <code>phaseStart</code> to the current time (this starts the countdown timer).</li>
+<li>Broadcasts <code>game-started</code> and <code>phase-changed</code> events via Pusher.</li>
+</ol>
+<p><strong>PATCH (Advance Phase)</strong>:</p>
+<ol>
+<li>This is called automatically when a timer runs out. ANY player&#39;s browser can trigger this (whoever&#39;s timer hits zero first).</li>
+<li>Uses a <strong>version check</strong> to prevent duplicate advances. The request includes the <code>knownVersion</code> — if it doesn&#39;t match the room&#39;s current version, the request is ignored (another player already advanced it).</li>
+<li>Phase transitions: <code>pre_round</code> → <code>voting</code> → (next round&#39;s) <code>pre_round</code> → ... → <code>game_end</code>.</li>
+<li>Increments the version counter.</li>
+<li>Broadcasts the <code>phase-changed</code> event.</li>
+</ol>
+<h3>File: <code>src/app/api/game/reset/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/game/reset</code></li>
+<li><strong>Purpose</strong>: <strong>Resets the game back to the lobby</strong> (after a game ends, so you can play again).</li>
+<li><strong>What it does</strong>: Clears all votes, resets phase to &quot;lobby&quot;, round to 0, and clears the selected questions. Custom questions are intentionally preserved so they can be reused.</li>
+</ul>
+<h3>File: <code>src/app/api/vote/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/vote</code></li>
+<li><strong>Purpose</strong>: <strong>Processes a player&#39;s vote.</strong></li>
+<li><strong>What it does</strong>:<ol>
+<li>Validates that the room exists and is currently in the &quot;voting&quot; phase.</li>
+<li>If <strong>single vote mode</strong>: Deletes any previous vote by this player in this round, then creates the new vote.</li>
+<li>If <strong>multiple votes mode</strong>: Toggles the vote — if the player already voted for this target, it removes the vote; otherwise, it adds the vote.</li>
+<li>Fetches ALL votes for the current round and broadcasts them via Pusher (<code>votes-synced</code>) so every player&#39;s screen updates with the latest vote counts.</li>
+</ol>
+</li>
+</ul>
+<h3>File: <code>src/app/api/chat/[roomId]/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>GET /api/chat/ABC123</code> (fetch messages) and <code>POST /api/chat/ABC123</code> (send message)</li>
+<li><strong>Purpose</strong>: <strong>Handles chat messages.</strong></li>
+<li><strong>GET</strong>: Returns all chat messages for the room.</li>
+<li><strong>POST</strong>: Creates a new chat message, saves it to the database, and broadcasts it via Pusher so it appears instantly on everyone&#39;s chat panel.</li>
+</ul>
+<h3>File: <code>src/app/api/chat/typing/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>POST /api/chat/typing</code></li>
+<li><strong>Purpose</strong>: <strong>Broadcasts typing indicators.</strong> When a player types in the chat box, this sends a <code>user-typing</code> event via Pusher so other players see &quot;PlayerName is typing...&quot;.</li>
+</ul>
+<h3>File: <code>src/app/api/questions/route.ts</code></h3>
+<ul>
+<li><strong>URL</strong>: <code>GET</code>, <code>POST</code>, <code>PATCH</code>, <code>DELETE /api/questions</code></li>
+<li><strong>Purpose</strong>: <strong>Manages custom questions.</strong></li>
+<li><strong>GET</strong>: Fetches a specific player&#39;s custom questions.</li>
+<li><strong>POST</strong>: Adds a new custom question. Broadcasts updated <code>customQTotal</code> count.</li>
+<li><strong>PATCH</strong>: Edits an existing custom question (only the owner can edit their own).</li>
+<li><strong>DELETE</strong>: Deletes a custom question. Broadcasts updated <code>customQTotal</code> count.</li>
+</ul>
+<h3>File: <code>src/lib/game-logic.ts</code></h3>
+<ul>
+<li><strong>File type</strong>: <code>.ts</code> (TypeScript)</li>
+<li><strong>Purpose</strong>: Contains <strong>all the built-in question sets</strong> and <strong>helper functions</strong> used by the backend.</li>
+<li><strong>What&#39;s inside</strong>:<ul>
+<li><code>QUESTION_SETS</code>: A massive object containing 5 sets of 25 questions each: Classic, Chaos, Awkward, Polarizing, and Dirty. Each question has an <code>id</code>, <code>text</code>, and <code>src</code> (which set it belongs to).</li>
+<li><code>generateRoomId()</code>: Creates random 8-character alphanumeric room codes.</li>
+<li><code>generatePlayerId()</code>: Creates unique player IDs.</li>
+<li><code>hashPassword()</code>: Scrambles passwords for secure storage.</li>
+<li><code>selectQuestions()</code>: The algorithm that picks the right questions based on the host&#39;s settings (which sets are selected, how many from each, whether to include custom questions, etc.).</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: Whenever you want to add, change, or remove questions from the built-in sets.</li>
+</ul>
+<hr>
+<h2>7. The Real-Time Layer — The Nervous System</h2>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: Imagine you&#39;re in a classroom. Without Pusher, every student would have to keep raising their hand and asking &quot;Did the teacher write anything new on the board?&quot; every second. WITH Pusher, the teacher has a megaphone — whenever she writes something new, she announces it to the whole class at once. No one needs to ask.</p>
+</blockquote>
+<h3>How Pusher Works in This Project</h3>
+<p>Pusher uses a concept called <strong>channels</strong> and <strong>events</strong>:</p>
+<ul>
+<li><strong>Channel</strong>: A named communication pipeline. Each room gets its own channel named <code>room-{roomId}</code> (e.g., <code>room-S2UW3965</code>). Only players in that room subscribe to (listen on) that channel.</li>
+<li><strong>Event</strong>: A named message sent through a channel. For example, <code>player-joined</code>, <code>vote-updated</code>, <code>chat-message</code>, <code>phase-changed</code>, etc.</li>
+</ul>
+<h3>File: <code>src/lib/pusher.ts</code> (Server-Side Pusher)</h3>
+<ul>
+<li><strong>Purpose</strong>: Used by the BACKEND to <strong>send</strong> events TO players&#39; browsers.</li>
+<li><strong>How it works</strong>: When the backend processes an action (e.g., someone votes), it calls <code>pusher.trigger(&#39;room-S2UW3965&#39;, &#39;votes-synced&#39;, voteData)</code> to instantly push the updated vote data to every browser that is subscribed to that room&#39;s channel.</li>
+<li><strong>When to modify</strong>: Almost never. Only if you change Pusher providers or configuration.</li>
+</ul>
+<h3>File: <code>src/lib/pusher-client.ts</code> (Client-Side Pusher)</h3>
+<ul>
+<li><strong>Purpose</strong>: Used by the FRONTEND to <strong>receive</strong> events FROM the server.</li>
+<li><strong>How it works</strong>: When a player&#39;s browser loads the game room, it subscribes to the room&#39;s channel. Then it listens for events like <code>player-joined</code>, <code>vote-updated</code>, etc. When an event arrives, the browser updates the screen accordingly.</li>
+<li><strong>The <code>typeof window !== &#39;undefined&#39;</code> check</strong>: This is a safety guard. Since Next.js can run code on BOTH the server and the browser, this check ensures the Pusher client is only created in the browser (because the server doesn&#39;t have a &quot;window&quot; — only browsers do).</li>
+</ul>
+<h3>All Pusher Events Used:</h3>
+<table>
+<thead>
+<tr>
+<th>Event Name</th>
+<th>Triggered When</th>
+<th>What the Frontend Does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>player-joined</code></td>
+<td>A new player joins the room</td>
+<td>Adds the player to the player list</td>
+</tr>
+<tr>
+<td><code>player-left</code></td>
+<td>A player leaves or gets kicked</td>
+<td>Removes them from the list; if it&#39;s YOU, redirects to home</td>
+</tr>
+<tr>
+<td><code>player-renamed</code></td>
+<td>A player changes their name</td>
+<td>Updates the name in the player list</td>
+</tr>
+<tr>
+<td><code>room-updated</code></td>
+<td>Host changes settings</td>
+<td>Updates the lobby settings on everyone&#39;s screen</td>
+</tr>
+<tr>
+<td><code>game-started</code></td>
+<td>Host clicks &quot;Start Game&quot;</td>
+<td>Loads the questions and transitions to the game view</td>
+</tr>
+<tr>
+<td><code>phase-changed</code></td>
+<td>Timer runs out, game advances</td>
+<td>Updates the phase (pre_round → voting → next round)</td>
+</tr>
+<tr>
+<td><code>votes-synced</code></td>
+<td>Someone casts or changes a vote</td>
+<td>Updates the vote counts on everyone&#39;s voting cards</td>
+</tr>
+<tr>
+<td><code>chat-message</code></td>
+<td>Someone sends a chat message</td>
+<td>Adds the message to everyone&#39;s chat panel</td>
+</tr>
+<tr>
+<td><code>user-typing</code></td>
+<td>Someone is typing in the chat</td>
+<td>Shows &quot;PlayerName is typing...&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. The Frontend Layer — What Players See</h2>
+<blockquote>
+<p><strong>Kid-friendly analogy</strong>: The frontend is like the face of a clock. You see the hands moving and the numbers on the dial, but all the complex gear mechanisms are hidden behind the face (that&#39;s the backend). The frontend&#39;s job is to look pretty and respond when you tap it.</p>
+</blockquote>
+<h3>Pages (what URLs show):</h3>
+<h4>File: <code>src/app/layout.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>master wrapper</strong> for the entire website. Every single page on the site is wrapped inside this file&#39;s HTML structure.</li>
+<li><strong>What it does</strong>:<ul>
+<li>Loads two Google Fonts: <strong>Syne</strong> (used for headings and display text) and <strong>DM Sans</strong> (used for body text).</li>
+<li>Sets the page title (&quot;WhoseMLT — Most Likely To&quot;) and meta description for SEO (Search Engine Optimization — how Google finds and describes your site).</li>
+<li>Configures the <strong>viewport</strong> to force mobile browsers to render at 1280px width (simulating a desktop view).</li>
+<li>Applies global styles: background color, text color, font, minimum height.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change fonts, the page title, the viewport width (for mobile), or global body styles.</li>
+</ul>
+<h4>File: <code>src/app/globals.css</code></h4>
+<ul>
+<li><strong>File type</strong>: <code>.css</code> (Cascading Style Sheets — the language that controls how HTML elements look: colors, sizes, spacing, animations, etc.)</li>
+<li><strong>Purpose</strong>: Contains <strong>global styles</strong> that apply across the entire website.</li>
+<li><strong>What&#39;s inside</strong>:<ul>
+<li>The animated 4-color gradient background (<code>linear-gradient</code> with animation).</li>
+<li>The <code>glass-panel</code> class (semi-transparent frosted glass effect using <code>backdrop-blur</code>).</li>
+<li>The <code>glass-button</code> class (translucent button style).</li>
+<li>Glow effects (<code>glow-primary</code>, <code>glow-accent</code>, <code>glow-success</code>).</li>
+<li>Custom scrollbar styling (thin, translucent scrollbars).</li>
+<li>The floating emoji animation (<code>float-emoji</code> keyframes).</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change the background gradient colors, glass panel transparency, glow colors, or animation speeds.</li>
+</ul>
+<h4>File: <code>src/app/page.tsx</code></h4>
+<ul>
+<li><strong>URL</strong>: <code>yourwebsite.com/</code> (the home page)</li>
+<li><strong>Purpose</strong>: Renders the <code>LandingScreen</code> component. This is the entry point — the first thing users see.</li>
+<li><strong>This file is tiny</strong> — it just imports and displays <code>LandingScreen</code>. All the actual logic and visuals are in the component.</li>
+</ul>
+<h4>File: <code>src/app/room/[roomId]/page.tsx</code></h4>
+<ul>
+<li><strong>URL</strong>: <code>yourwebsite.com/room/S2UW3965</code></li>
+<li><strong>Purpose</strong>: Renders the <code>GameRoom</code> component for a specific room. The <code>[roomId]</code> in the folder name is a <strong>dynamic route parameter</strong> — Next.js automatically extracts the room code from the URL and passes it to the component.</li>
+</ul>
+<h3>Components (reusable UI pieces):</h3>
+<h4>File: <code>src/components/LandingScreen.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>home screen</strong> — the first thing players see.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>The animated floating emojis in the background (🤔, 🎯, 👀, 🔥, 💀, 🤡, 🤫, 🍻, 😈, 😂).</li>
+<li>A <strong>tabbed form</strong> with two tabs: &quot;Create Room&quot; and &quot;Join Room&quot;.</li>
+<li>Create Room: Takes display name + password → calls <code>POST /api/rooms</code>.</li>
+<li>Join Room: Takes display name + room code + password → calls <code>POST /api/join</code>.</li>
+<li>On success, stores the player ID and room ID in <strong>sessionStorage</strong> (a browser-side storage that persists until you close the tab) and redirects to <code>/room/{roomId}</code>.</li>
+<li>The &quot;How to Play&quot; card explaining the rules.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change the home screen design, add new form fields, change the emojis, or update the &quot;How to Play&quot; instructions.</li>
+</ul>
+<h4>File: <code>src/components/GameRoom.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>main game layout</strong> — the container that holds the entire 3-column game interface.</li>
+<li><strong>What it contains</strong>:<ul>
+<li><strong>Security check</strong>: On load, verifies the player has a valid session. If not, redirects to home.</li>
+<li><strong>Three-column layout</strong>: Left (PlayerList), Center (LobbyPanel/GamePanel/ResultsPanel depending on phase), Right (ChatPanel).</li>
+<li><strong>Mobile tab navigation</strong>: On small screens (which we force to desktop width anyway), shows tabs to switch between Players/Game/Chat.</li>
+<li><strong>Handler functions</strong>: <code>handleRename</code>, <code>handleStartGame</code>, <code>handleNewGame</code>, <code>handleLeaveRoom</code>, <code>handleKick</code> — each makes an API call to the corresponding backend route.</li>
+<li>Uses the <code>useRoom</code> and <code>useVotes</code> hooks to get live data.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To add new sidebar sections, change the column layout, or add new game actions.</li>
+</ul>
+<h4>File: <code>src/components/LobbyPanel.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>lobby/settings screen</strong> shown before the game starts.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>Room Code display with the &quot;Copy&quot; button.</li>
+<li><strong>Voting Time</strong> selector (10s, 15s, 20s, 30s).</li>
+<li><strong>Number of Rounds</strong> selector (5, 10, 15, 20).</li>
+<li><strong>Allow Multiple Votes</strong> toggle.</li>
+<li><strong>Question Sets</strong> selection (Classic, Chaos, Awkward, Polarizing, Dirty) with FIFO logic (max 2 sets; selecting a 3rd deselects the first).</li>
+<li><strong>Equal Distribution</strong> toggle and custom distribution <strong>slider</strong> (when 2 sets are selected).</li>
+<li><strong>Custom Questions</strong> section: Add, edit, delete your own questions.</li>
+<li><strong>Use Only Custom Questions</strong> toggle (only available when enough custom questions exist).</li>
+<li><strong>Start Game</strong> button (host only, requires 2+ players).</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To add new game settings, change how question selection works, or modify the lobby UI.</li>
+</ul>
+<h4>File: <code>src/components/GamePanel.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>active game screen</strong> shown during <code>pre_round</code> and <code>voting</code> phases.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>Round counter (&quot;Round 3 / 10&quot;).</li>
+<li>Phase indicator (&quot;GET READY&quot; or &quot;VOTING OPEN&quot;).</li>
+<li>The question card with the &quot;Most Likely To...&quot; prompt.</li>
+<li><strong>Timer bar</strong> with color-coded countdown (changes color when under 5 seconds).</li>
+<li><strong>&quot;Voting begins in&quot;</strong> text during the reading phase.</li>
+<li><strong>Player voting cards</strong>: Each player&#39;s name is displayed as a clickable card. Clicking votes for that player. Vote counts are shown as progress bars filling behind each card.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change the voting UI, timer design, or add new game mechanics.</li>
+</ul>
+<h4>File: <code>src/components/ResultsPanel.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>end-of-game results screen</strong> with leaderboard and confetti.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>Per-question breakdown: For each round, shows the question and who received the most votes.</li>
+<li>Overall leaderboard: Ranks all players by total votes received across all rounds.</li>
+<li>Trophy/medal emojis for top 3 players.</li>
+<li><strong>Confetti animation</strong>: Uses <code>canvas-confetti</code> to trigger a massive burst of colorful confetti.</li>
+<li><strong>&quot;Back to Lobby&quot;</strong> button (host only) to reset the game.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change how results are displayed, add new stats, or change the confetti behavior.</li>
+</ul>
+<h4>File: <code>src/components/PlayerList.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>left sidebar</strong> showing all players in the room.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>Player names with a crown emoji (👑) for the host and &quot;(You)&quot; label for yourself.</li>
+<li><strong>Edit Name</strong> button (only visible in the lobby phase).</li>
+<li><strong>Leave Room</strong> button.</li>
+<li><strong>Kick</strong> button (visible only to the host, next to other players&#39; names).</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To add player avatars, online status indicators, or change the kick UI.</li>
+</ul>
+<h4>File: <code>src/components/ChatPanel.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>right sidebar</strong> with live chat functionality.</li>
+<li><strong>What it contains</strong>:<ul>
+<li>Scrollable message list with auto-scroll to latest message.</li>
+<li>System messages styled differently (centered, yellow, italic).</li>
+<li>Player messages with colored names.</li>
+<li><strong>Typing indicators</strong>: Shows &quot;PlayerName is typing...&quot; when someone is actively typing.</li>
+<li>Message input with &quot;Send&quot; button.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change chat styling, add emoji reactions, or modify the typing indicator behavior.</li>
+</ul>
+<h4>Files: <code>src/components/ui/Chip.tsx</code> and <code>src/components/ui/Toggle.tsx</code></h4>
+<ul>
+<li><strong>Purpose</strong>: Tiny, reusable UI building blocks.</li>
+<li><strong>Chip</strong>: A small pill-shaped button used for selecting options (like &quot;10s&quot;, &quot;Classic&quot;, &quot;5 rounds&quot;). Has an active/inactive state.</li>
+<li><strong>Toggle</strong>: An on/off switch used for boolean settings (like &quot;Allow Multiple Votes&quot;).</li>
+<li><strong>When to modify</strong>: To change the look of all chips or toggles across the entire app at once.</li>
+</ul>
+<h3>Hooks (the wiring between frontend and backend):</h3>
+<blockquote>
+<p><strong>What is a Hook?</strong> In React, a &quot;hook&quot; is a special function that lets components &quot;hook into&quot; React&#39;s features like state management and side effects. Custom hooks (like <code>useRoom</code>) are reusable functions that encapsulate complex logic so components stay clean and simple.</p>
+</blockquote>
+<h4>File: <code>src/hooks/useRoom.ts</code></h4>
+<ul>
+<li><strong>Purpose</strong>: The <strong>most important connector file</strong> in the entire project. It bridges the frontend components with both the backend API and the real-time Pusher events.</li>
+<li><strong>What it does</strong>:<ol>
+<li><strong>Fetches initial data</strong>: When the game room loads, it makes API calls to get the room data and chat history.</li>
+<li><strong>Subscribes to Pusher</strong>: Connects to the room&#39;s Pusher channel and listens for ALL real-time events (player joined, player left, votes synced, chat messages, phase changes, typing indicators, etc.).</li>
+<li><strong>Manages the countdown timer</strong>: Calculates how many seconds are left in the current phase by comparing the <code>phaseStart</code> timestamp with the current time. When the timer hits zero, it calls the backend to advance to the next phase.</li>
+<li><strong>Provides helper functions</strong>: <code>updateSettings()</code> (sends setting changes to the backend), <code>sendChat()</code> (sends a chat message to the backend), <code>advancePhase()</code> (triggers a phase transition).</li>
+<li><strong>Fallback polling</strong>: Every 5 seconds, it re-fetches the room data from the backend as a safety net. If Pusher misses an event (network glitch), the polling catches the discrepancy.</li>
+</ol>
+</li>
+<li><strong>When to modify</strong>: To add new real-time event listeners, change the timer logic, or add new data streams.</li>
+</ul>
+<h4>File: <code>src/hooks/useVotes.ts</code></h4>
+<ul>
+<li><strong>Purpose</strong>: Manages <strong>voting state</strong> for the current round.</li>
+<li><strong>What it does</strong>:<ul>
+<li>Tracks which players you&#39;ve voted for (<code>myVotes</code>).</li>
+<li>Calculates vote counts per player (<code>voteCounts</code>).</li>
+<li>Provides a <code>castVote()</code> function that sends your vote to the backend API.</li>
+<li>Syncs with the <code>votes-synced</code> Pusher event to keep counts accurate across all players.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: To change voting logic (e.g., limiting max votes per round, adding vote categories).</li>
+</ul>
+<h3>Shared Utilities:</h3>
+<h4>File: <code>src/lib/types.ts</code></h4>
+<ul>
+<li><strong>Purpose</strong>: Defines the <strong>shapes of all data</strong> used throughout the project.</li>
+<li><strong>What it contains</strong>: TypeScript <strong>interfaces</strong> — blueprints that describe what fields an object should have and what types those fields are. For example:<ul>
+<li><code>RoomSettings</code>: Describes the shape of game settings (voting_time is a number, sets is a list of strings, etc.).</li>
+<li><code>PlayerData</code>: Describes a player (id, name, roomId, joinedAt).</li>
+<li><code>RoomData</code>: Describes a full room with all its properties.</li>
+<li><code>ChatMessageData</code>: Describes a chat message.</li>
+<li><code>VoteData</code>: Describes a vote.</li>
+<li><code>PusherEvent</code>: Describes all possible real-time events.</li>
+</ul>
+</li>
+<li><strong>When to modify</strong>: Whenever you add a new field to any data structure (e.g., adding an <code>avatar</code> field to <code>PlayerData</code>).</li>
+</ul>
+<hr>
+<h2>9. How Everything Connects</h2>
+<p>Here is the complete data flow for three key actions:</p>
+<h3>Flow 1: Player Joins a Room</h3>
+<pre><code>Player types name, room code, password → clicks &quot;Join Room&quot;
+        │
+        ▼
+LandingScreen.tsx sends POST request to /api/join
+        │
+        ▼
+Backend (join/route.ts) receives the request
+   ├── Validates the inputs
+   ├── Checks room exists in database (via prisma.ts → PostgreSQL)
+   ├── Verifies password hash matches
+   ├── Creates new Player record in database
+   ├── Creates system chat message in database
+   ├── Sends &quot;player-joined&quot; event via Pusher (pusher.ts)
+   └── Returns room data + player ID
+        │
+        ▼
+LandingScreen.tsx receives the response
+   ├── Stores playerId in sessionStorage
+   └── Redirects browser to /room/{roomId}
+        │
+        ▼
+GameRoom.tsx loads → useRoom.ts hook activates
+   ├── Fetches room data via GET /api/rooms/{roomId}
+   └── Subscribes to Pusher channel &quot;room-{roomId}&quot;
+        │
+        ▼
+Meanwhile, on EXISTING players&#39; screens:
+   └── useRoom.ts receives &quot;player-joined&quot; Pusher event
+       └── Adds the new player to their PlayerList automatically
+</code></pre>
+<h3>Flow 2: Player Casts a Vote</h3>
+<pre><code>Player clicks on a player card during voting phase
+        │
+        ▼
+GamePanel.tsx calls castVote() from useVotes.ts
+        │
+        ▼
+useVotes.ts sends POST request to /api/vote
+        │
+        ▼
+Backend (vote/route.ts) receives the request
+   ├── Validates room exists and phase is &quot;voting&quot;
+   ├── Creates/toggles the Vote record in database
+   ├── Fetches ALL votes for this round from database
+   └── Broadcasts &quot;votes-synced&quot; event via Pusher
+        │
+        ▼
+On ALL players&#39; screens:
+   └── useRoom.ts receives &quot;votes-synced&quot; event
+       └── useVotes.ts updates voteCounts
+           └── GamePanel.tsx re-renders with updated vote bars
+</code></pre>
+<h3>Flow 3: Timer Runs Out → Phase Advances</h3>
+<pre><code>useRoom.ts timer ticks every second
+   └── Calculates: timeLeft = duration - elapsed seconds
+       │
+       ▼ (when timeLeft hits 0)
+useRoom.ts calls PATCH /api/game with knownVersion
+        │
+        ▼
+Backend (game/route.ts) receives the request
+   ├── Checks if knownVersion matches current version (prevents duplicates)
+   ├── Determines next phase (pre_round → voting → next pre_round → ... → game_end)
+   ├── Updates room in database (new phase, new round, incremented version)
+   └── Broadcasts &quot;phase-changed&quot; event via Pusher
+        │
+        ▼
+On ALL players&#39; screens:
+   └── useRoom.ts receives &quot;phase-changed&quot; event
+       └── Updates room state → GamePanel.tsx or ResultsPanel.tsx renders accordingly
+</code></pre>
+<hr>
+<h2>10. The Complete Game Flow</h2>
+<p>Here is every phase of the game from start to finish:</p>
+<pre><code>┌──────────────────────────────────────────┐
+│              HOME SCREEN                 │
+│  Player creates or joins a room          │
+└────────────────┬─────────────────────────┘
+                 │
+                 ▼
+┌──────────────────────────────────────────┐
+│               LOBBY                      │
+│  Host configures settings                │
+│  Players add custom questions            │
+│  Host clicks &quot;Start Game&quot;                │
+│  Phase: &quot;lobby&quot;                          │
+└────────────────┬─────────────────────────┘
+                 │  POST /api/game
+                 ▼
+┌──────────────────────────────────────────┐
+│          PRE-ROUND (Reading)             │
+│  Question appears on screen              │
+│  &quot;Voting begins in 15...&quot; countdown      │
+│  Players read the question               │
+│  Phase: &quot;pre_round&quot;                      │
+└────────────────┬─────────────────────────┘
+                 │  Timer hits 0 → PATCH /api/game
+                 ▼
+┌──────────────────────────────────────────┐
+│              VOTING                      │
+│  Players click to vote for someone       │
+│  Vote counts update in real-time         │
+│  Timer counts down (10-30 seconds)       │
+│  Phase: &quot;voting&quot;                         │
+└────────────────┬─────────────────────────┘
+                 │  Timer hits 0 → PATCH /api/game
+                 ▼
+          ┌──────┴──────┐
+     More rounds?    Last round?
+          │              │
+          ▼              ▼
+   Back to PRE-ROUND   ┌─────────────────────────────┐
+   (next question)     │          GAME END            │
+                       │  Leaderboard + confetti       │
+                       │  Per-question vote breakdown   │
+                       │  Host can click &quot;Back to Lobby&quot;│
+                       │  Phase: &quot;game_end&quot;             │
+                       └───────────────┬───────────────┘
+                                       │  POST /api/game/reset
+                                       ▼
+                                  Back to LOBBY
+</code></pre>
+<hr>
+<h2>11. How to Modify Things</h2>
+<h3>Want to change how the game LOOKS?</h3>
+<table>
+<thead>
+<tr>
+<th>What to change</th>
+<th>Which file to edit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Background gradient colors</td>
+<td><code>src/app/globals.css</code> (the <code>linear-gradient</code> in <code>body</code>)</td>
+</tr>
+<tr>
+<td>Glass panel transparency</td>
+<td><code>src/app/globals.css</code> (the <code>.glass-panel</code> class)</td>
+</tr>
+<tr>
+<td>Fonts</td>
+<td><code>src/app/layout.tsx</code> (the font imports at the top)</td>
+</tr>
+<tr>
+<td>Page title</td>
+<td><code>src/app/layout.tsx</code> (the <code>metadata</code> object)</td>
+</tr>
+<tr>
+<td>Mobile viewport width</td>
+<td><code>src/app/layout.tsx</code> (the <code>viewport</code> object, change <code>1280</code>)</td>
+</tr>
+<tr>
+<td>Game board max height</td>
+<td><code>src/components/GameRoom.tsx</code> (the <code>md:max-h-[850px]</code> class)</td>
+</tr>
+<tr>
+<td>Floating emojis</td>
+<td><code>src/components/LandingScreen.tsx</code> (the emoji <code>&lt;div&gt;</code> elements)</td>
+</tr>
+<tr>
+<td>Room code size</td>
+<td><code>src/components/LobbyPanel.tsx</code> (the <code>text-4xl md:text-5xl</code> on the <code>&lt;h1&gt;</code>)</td>
+</tr>
+<tr>
+<td>Copy button text/symbol</td>
+<td><code>src/components/LobbyPanel.tsx</code> (the word &quot;Copy&quot; inside the <code>&lt;button&gt;</code>)</td>
+</tr>
+<tr>
+<td>Any component&#39;s colors</td>
+<td>The respective component <code>.tsx</code> file (search for <code>#</code> hex codes or Tailwind color classes)</td>
+</tr>
+</tbody></table>
+<h3>Want to change the game RULES/LOGIC?</h3>
+<table>
+<thead>
+<tr>
+<th>What to change</th>
+<th>Which file to edit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add/edit/remove questions</td>
+<td><code>src/lib/game-logic.ts</code> (the <code>QUESTION_SETS</code> object)</td>
+</tr>
+<tr>
+<td>Change default settings</td>
+<td><code>src/app/api/rooms/route.ts</code> (the <code>defaultSettings</code> object)</td>
+</tr>
+<tr>
+<td>Change reading time (pre-round)</td>
+<td><code>src/hooks/useRoom.ts</code> (the number <code>15</code> in the timer logic)</td>
+</tr>
+<tr>
+<td>Add/remove voting time options</td>
+<td><code>src/components/LobbyPanel.tsx</code> (the <code>[10, 15, 20, 30]</code> array)</td>
+</tr>
+<tr>
+<td>Add/remove round options</td>
+<td><code>src/components/LobbyPanel.tsx</code> (the <code>[5, 10, 15, 20]</code> array)</td>
+</tr>
+<tr>
+<td>Change max question sets</td>
+<td><code>src/components/LobbyPanel.tsx</code> (the <code>newSets.length &gt;= 2</code> check)</td>
+</tr>
+<tr>
+<td>Change voting behavior</td>
+<td><code>src/app/api/vote/route.ts</code></td>
+</tr>
+<tr>
+<td>Change what happens on game reset</td>
+<td><code>src/app/api/game/reset/route.ts</code></td>
+</tr>
+</tbody></table>
+<h3>Want to change the DATABASE structure?</h3>
+<ol>
+<li>Edit <code>prisma/schema.prisma</code> to add/modify/remove tables or columns.</li>
+<li>Run <code>npx prisma migrate dev --name describe_your_change</code> in the terminal to apply the changes.</li>
+<li>Run <code>npx prisma generate</code> to regenerate the Prisma client.</li>
+<li>Update <code>src/lib/types.ts</code> to match the new data shapes.</li>
+<li>Update any API routes that interact with the changed tables.</li>
+<li>Update any frontend components that display the changed data.</li>
+</ol>
+<hr>
+<h2>12. Configuration Files</h2>
+<p>These are the files at the root of the project that configure various tools:</p>
+<h3><code>package.json</code></h3>
+<ul>
+<li><strong>What it is</strong>: The project&#39;s <strong>identity card and shopping list</strong>. It tells Node.js (the JavaScript runtime) what this project is called, what commands you can run, and what libraries (dependencies) it needs.</li>
+<li><strong>Key sections</strong>:<ul>
+<li><code>scripts</code>: Shortcut commands. <code>npm run dev</code> starts the development server. <code>npm run build</code> creates the production version.</li>
+<li><code>dependencies</code>: Libraries the app NEEDS to work (React, Next.js, Prisma, Pusher, etc.).</li>
+<li><code>devDependencies</code>: Libraries only needed DURING development (TypeScript compiler, linter, Tailwind CSS).</li>
+</ul>
+</li>
+</ul>
+<h3><code>tsconfig.json</code></h3>
+<ul>
+<li><strong>What it is</strong>: Configuration for the <strong>TypeScript compiler</strong>. Tells TypeScript how strict to be, where to find files, and how to resolve imports.</li>
+<li><strong>The <code>@/</code> alias</strong>: The <code>paths</code> section maps <code>@/*</code> to <code>./src/*</code>, so instead of writing <code>import { prisma } from &#39;../../../../lib/prisma&#39;</code>, you can write <code>import { prisma } from &#39;@/lib/prisma&#39;</code>. Much cleaner!</li>
+</ul>
+<h3><code>next.config.ts</code></h3>
+<ul>
+<li><strong>What it is</strong>: Configuration for <strong>Next.js</strong> itself. Currently minimal — just enables default settings.</li>
+</ul>
+<h3><code>postcss.config.mjs</code></h3>
+<ul>
+<li><strong>What it is</strong>: Configuration for <strong>PostCSS</strong>, a CSS processing tool. Tailwind CSS runs as a PostCSS plugin, so this file tells PostCSS to use the Tailwind plugin.</li>
+</ul>
+<h3><code>eslint.config.mjs</code></h3>
+<ul>
+<li><strong>What it is</strong>: Configuration for <strong>ESLint</strong>, a tool that checks your code for common mistakes, style violations, and potential bugs. Think of it as a grammar checker for code.</li>
+</ul>
+<h3><code>.gitignore</code></h3>
+<ul>
+<li><strong>What it is</strong>: Tells <strong>Git</strong> (the version control system) which files to NOT upload to GitHub. Things like <code>node_modules/</code> (the massive folder of downloaded libraries), <code>.env</code> (secret keys), and <code>.next/</code> (build output) should never be committed.</li>
+</ul>
+<hr>
+<h2>13. Glossary of Terms</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Simple Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>API</strong></td>
+<td>Application Programming Interface — a set of URLs your frontend can call to ask the backend to do things</td>
+</tr>
+<tr>
+<td><strong>API Endpoint</strong></td>
+<td>A specific URL on the server that accepts requests (like a drive-through window)</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>The server-side code that runs on a computer in the cloud. Users never see it directly</td>
+</tr>
+<tr>
+<td><strong>Broadcast</strong></td>
+<td>Sending a message to multiple recipients at the same time</td>
+</tr>
+<tr>
+<td><strong>Channel</strong></td>
+<td>A named communication pipeline in Pusher. Only people subscribed to a channel receive its messages</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>The user&#39;s browser. &quot;Client-side&quot; means &quot;runs in the browser&quot;</td>
+</tr>
+<tr>
+<td><strong>Component</strong></td>
+<td>A reusable, self-contained piece of the user interface (like a LEGO brick)</td>
+</tr>
+<tr>
+<td><strong>CRUD</strong></td>
+<td>Create, Read, Update, Delete — the four basic operations on data</td>
+</tr>
+<tr>
+<td><strong>CSS</strong></td>
+<td>Cascading Style Sheets — the language that controls how HTML looks (colors, sizes, fonts, layouts)</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>A structured system for storing data permanently (like a giant organized filing cabinet)</td>
+</tr>
+<tr>
+<td><strong>Dependency</strong></td>
+<td>An external library your project relies on to work</td>
+</tr>
+<tr>
+<td><strong>Deploy</strong></td>
+<td>To put your code on a server so real users on the internet can access it</td>
+</tr>
+<tr>
+<td><strong>Dynamic Route</strong></td>
+<td>A URL pattern with a variable part, like <code>/room/[roomId]</code> where <code>[roomId]</code> changes for each room</td>
+</tr>
+<tr>
+<td><strong>Environment Variable</strong></td>
+<td>A secret value stored outside the code (in <code>.env</code>) to keep it safe</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>A named message sent through a Pusher channel (like &quot;player-joined&quot; or &quot;vote-updated&quot;)</td>
+</tr>
+<tr>
+<td><strong>Framework</strong></td>
+<td>A pre-built code skeleton that provides structure and common features so you don&#39;t build from scratch</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>The visual part of the app that users see and interact with in their browser</td>
+</tr>
+<tr>
+<td><strong>Hash</strong></td>
+<td>A one-way scrambling of data. You can turn a password into a hash, but you can&#39;t turn a hash back into a password</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td>A special React function that lets components access features like state management and side effects</td>
+</tr>
+<tr>
+<td><strong>Hot Reloading</strong></td>
+<td>When the dev server automatically updates your running app as you save code changes</td>
+</tr>
+<tr>
+<td><strong>HTML</strong></td>
+<td>HyperText Markup Language — the language that defines the structure of web pages</td>
+</tr>
+<tr>
+<td><strong>HTTP</strong></td>
+<td>HyperText Transfer Protocol — the rules for how browsers and servers communicate</td>
+</tr>
+<tr>
+<td><strong>HTTP Method</strong></td>
+<td>The type of request: GET (read), POST (create), PATCH (update), DELETE (remove)</td>
+</tr>
+<tr>
+<td><strong>Interface</strong></td>
+<td>In TypeScript, a blueprint describing the shape of an object (what fields it has and their types)</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td>JavaScript Object Notation — a format for structuring data as key-value pairs: <code>{ &quot;name&quot;: &quot;Farjad&quot;, &quot;age&quot;: 20 }</code></td>
+</tr>
+<tr>
+<td><strong>JSX</strong></td>
+<td>JavaScript XML — a syntax that lets you write HTML-like code directly inside JavaScript/TypeScript</td>
+</tr>
+<tr>
+<td><strong>Library</strong></td>
+<td>A collection of pre-written code that you can use in your project (like a toolbox)</td>
+</tr>
+<tr>
+<td><strong>Middleware</strong></td>
+<td>Code that runs between receiving a request and sending a response (like a security checkpoint)</td>
+</tr>
+<tr>
+<td><strong>Migration</strong></td>
+<td>A versioned change to your database structure (adding/removing tables or columns)</td>
+</tr>
+<tr>
+<td><strong>Node.js</strong></td>
+<td>A runtime that lets you run JavaScript outside of a browser (on a server)</td>
+</tr>
+<tr>
+<td><strong>npm</strong></td>
+<td>Node Package Manager — a tool for downloading and managing JavaScript libraries</td>
+</tr>
+<tr>
+<td><strong>ORM</strong></td>
+<td>Object-Relational Mapper — a translator between your code and the database</td>
+</tr>
+<tr>
+<td><strong>Polling</strong></td>
+<td>Repeatedly asking the server &quot;is there anything new?&quot; at regular intervals</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>A powerful, free, open-source relational database system</td>
+</tr>
+<tr>
+<td><strong>Prisma</strong></td>
+<td>An ORM that lets you interact with your database using clean TypeScript instead of raw SQL</td>
+</tr>
+<tr>
+<td><strong>Pusher</strong></td>
+<td>A third-party service that enables real-time, bidirectional communication between server and browsers</td>
+</tr>
+<tr>
+<td><strong>React</strong></td>
+<td>A JavaScript library for building user interfaces using reusable components</td>
+</tr>
+<tr>
+<td><strong>Real-time</strong></td>
+<td>Data that updates instantly for all users without refreshing the page</td>
+</tr>
+<tr>
+<td><strong>Render</strong></td>
+<td>To display a component on the screen (convert code into visible pixels)</td>
+</tr>
+<tr>
+<td><strong>REST</strong></td>
+<td>Representational State Transfer — a standard way of designing API endpoints</td>
+</tr>
+<tr>
+<td><strong>Route</strong></td>
+<td>A URL pattern that maps to a specific page or API handler</td>
+</tr>
+<tr>
+<td><strong>Schema</strong></td>
+<td>The structure/blueprint of a database — what tables exist and what columns they have</td>
+</tr>
+<tr>
+<td><strong>SEO</strong></td>
+<td>Search Engine Optimization — techniques to make your site rank higher on Google</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td>A computer in the cloud that runs your backend code and serves your website to users</td>
+</tr>
+<tr>
+<td><strong>Session Storage</strong></td>
+<td>Browser-side storage that keeps data until the tab is closed</td>
+</tr>
+<tr>
+<td><strong>Singleton</strong></td>
+<td>A design pattern ensuring only ONE instance of something exists (like one database connection)</td>
+</tr>
+<tr>
+<td><strong>SQL</strong></td>
+<td>Structured Query Language — the language for communicating with relational databases</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Data that a component keeps track of and can change over time (like a counter or a list of players)</td>
+</tr>
+<tr>
+<td><strong>Subscribe</strong></td>
+<td>To sign up to receive messages from a Pusher channel</td>
+</tr>
+<tr>
+<td><strong>Tailwind CSS</strong></td>
+<td>A utility-first CSS framework that uses pre-built class names for styling</td>
+</tr>
+<tr>
+<td><strong>TypeScript</strong></td>
+<td>JavaScript with added type safety — catches data type errors before the code runs</td>
+</tr>
+<tr>
+<td><strong>Vercel</strong></td>
+<td>A cloud platform for deploying Next.js websites (where your live site is hosted)</td>
+</tr>
+<tr>
+<td><strong>Viewport</strong></td>
+<td>The visible area of a web page in the browser window</td>
+</tr>
+<tr>
+<td><strong>WebSocket</strong></td>
+<td>A persistent two-way connection between browser and server for instant communication</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>This document was generated for the WhoseMLT project — a real-time multiplayer party game built with Next.js, React, TypeScript, Prisma, PostgreSQL, Pusher, and Tailwind CSS.</em></p>
+</body>
+</html>
