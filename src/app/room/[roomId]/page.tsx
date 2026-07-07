@@ -4,7 +4,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
   const { roomId } = await params
   
   return (
-    <main>
+    <main className="min-h-screen flex flex-col justify-center">
       <GameRoom roomId={roomId} />
     </main>
   )

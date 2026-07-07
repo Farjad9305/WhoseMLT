@@ -98,7 +98,7 @@ export default function GameRoom({ roomId }: { roomId: string }) {
   }
 
   return (
-    <div className="max-w-[1600px] mx-auto h-screen flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-[#050012] md:bg-transparent p-0 md:p-6">
+    <div className="max-w-[1600px] mx-auto w-full h-screen md:max-h-[1100px] flex flex-col md:flex-row gap-4 md:gap-6 overflow-hidden bg-[#050012] md:bg-transparent p-0 md:p-6">
       
       {/* Mobile Tabs Header */}
       <div className="md:hidden flex items-center justify-between bg-black/40 p-3 shadow-md shrink-0">

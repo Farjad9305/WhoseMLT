@@ -68,10 +68,16 @@ export default function LandingScreen() {
     <div className="min-h-screen flex flex-col items-center p-4 bg-gradient-to-br from-[#0c0818] via-[#2a1154] to-[#0c0818] animate-gradient-shift relative overflow-hidden">
       
       {/* Floating Background Emojis */}
-      <div className="absolute top-[10%] left-[10%] text-6xl animate-float pointer-events-none select-none">🤔</div>
-      <div className="absolute top-[20%] right-[15%] text-7xl animate-float-delayed pointer-events-none select-none">🎯</div>
-      <div className="absolute bottom-[20%] left-[20%] text-5xl animate-float-delayed pointer-events-none select-none">🤫</div>
-      <div className="absolute bottom-[10%] right-[10%] text-6xl animate-float pointer-events-none select-none">😂</div>
+      <div className="absolute top-[5%] left-[10%] text-6xl animate-float opacity-80 pointer-events-none select-none">🤔</div>
+      <div className="absolute top-[15%] right-[12%] text-7xl animate-float-delayed opacity-90 pointer-events-none select-none">🎯</div>
+      <div className="absolute top-[35%] left-[5%] text-5xl animate-float opacity-60 pointer-events-none select-none">👀</div>
+      <div className="absolute top-[40%] right-[8%] text-6xl animate-float-delayed opacity-70 pointer-events-none select-none">🔥</div>
+      <div className="absolute top-[60%] left-[15%] text-7xl animate-float opacity-80 pointer-events-none select-none">💀</div>
+      <div className="absolute top-[65%] right-[18%] text-5xl animate-float-delayed opacity-90 pointer-events-none select-none">🤡</div>
+      <div className="absolute bottom-[20%] left-[8%] text-5xl animate-float-delayed opacity-70 pointer-events-none select-none">🤫</div>
+      <div className="absolute bottom-[25%] right-[5%] text-6xl animate-float opacity-60 pointer-events-none select-none">🍻</div>
+      <div className="absolute bottom-[5%] left-[25%] text-4xl animate-float opacity-50 pointer-events-none select-none">😈</div>
+      <div className="absolute bottom-[8%] right-[20%] text-6xl animate-float-delayed opacity-80 pointer-events-none select-none">😂</div>
 
       <div className="glass-panel p-8 w-full max-w-md z-10 mt-10">
         <h1 className="font-display font-bold text-4xl text-center mb-2 text-[#7B2FFF] glow-primary">WhoseMLT</h1>
