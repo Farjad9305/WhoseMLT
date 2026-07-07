@@ -195,6 +195,10 @@ const config = {
         "fromEnvVar": null,
         "value": "darwin-arm64",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -212,6 +216,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -220,8 +225,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Room {\n  id           String    @id\n  passwordHash String\n  hostId       String\n  hostName     String\n  phase        String    @default(\"lobby\")\n  round        Int       @default(0)\n  phaseStart   DateTime?\n  version      Int       @default(0)\n  settings     Json\n  questions    Json      @default(\"[]\")\n  createdAt    DateTime  @default(now())\n\n  players         Player[]\n  votes           Vote[]\n  chatMessages    ChatMessage[]\n  customQuestions CustomQuestion[]\n}\n\nmodel Player {\n  id       String   @id\n  name     String\n  roomId   String\n  joinedAt DateTime @default(now())\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n\nmodel Vote {\n  id       String @id @default(cuid())\n  roomId   String\n  round    Int\n  voterId  String\n  targetId String\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n\n  @@unique([roomId, round, voterId, targetId])\n}\n\nmodel ChatMessage {\n  id       String   @id @default(cuid())\n  roomId   String\n  pid      String?\n  name     String?\n  text     String\n  isSystem Boolean  @default(false)\n  sentAt   DateTime @default(now())\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n\nmodel CustomQuestion {\n  id      String @id @default(cuid())\n  roomId  String\n  ownerId String\n  text    String\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n",
-  "inlineSchemaHash": "88b0e15d8e8e2021cbef0301eea919ad9ceef41a7b46a2f0bafd3201002330a6",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Room {\n  id           String    @id\n  passwordHash String\n  hostId       String\n  hostName     String\n  phase        String    @default(\"lobby\")\n  round        Int       @default(0)\n  phaseStart   DateTime?\n  version      Int       @default(0)\n  settings     Json\n  questions    Json      @default(\"[]\")\n  createdAt    DateTime  @default(now())\n\n  players         Player[]\n  votes           Vote[]\n  chatMessages    ChatMessage[]\n  customQuestions CustomQuestion[]\n}\n\nmodel Player {\n  id       String   @id\n  name     String\n  roomId   String\n  joinedAt DateTime @default(now())\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n\nmodel Vote {\n  id       String @id @default(cuid())\n  roomId   String\n  round    Int\n  voterId  String\n  targetId String\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n\n  @@unique([roomId, round, voterId, targetId])\n}\n\nmodel ChatMessage {\n  id       String   @id @default(cuid())\n  roomId   String\n  pid      String?\n  name     String?\n  text     String\n  isSystem Boolean  @default(false)\n  sentAt   DateTime @default(now())\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n\nmodel CustomQuestion {\n  id      String @id @default(cuid())\n  roomId  String\n  ownerId String\n  text    String\n\n  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)\n}\n",
+  "inlineSchemaHash": "f219662d6e7a5b7e30041da6d888c74fcfb77130539dbb693eef1e4a0d79585e",
   "copyEngine": true
 }
 
@@ -262,6 +267,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "src/generated/prisma/client/libquery_engine-darwin-arm64.dylib.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/prisma/client/schema.prisma")
