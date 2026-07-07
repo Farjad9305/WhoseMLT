@@ -3,7 +3,7 @@ import { RoomSettings, Question } from '@/lib/types'
 import Toggle from './ui/Toggle'
 import Chip from './ui/Chip'
 
-const BUILT_IN_SETS = ['Classic', 'Chaos', 'Deep Cuts', 'Awkward']
+const BUILT_IN_SETS = ['Classic', 'Chaos', 'Deep Cuts', 'Awkward', 'Polarizing', 'Dirty']
 
 export default function LobbyPanel({ 
   roomId, 
@@ -67,10 +67,64 @@ export default function LobbyPanel({
 
   const toggleSet = (set: string) => {
     if (!isHost) return
-    const newSets = settings.sets.includes(set) 
-      ? settings.sets.filter(s => s !== set) 
-      : [...settings.sets, set]
-    onUpdateSettings({ sets: newSets })
+    let newSets = [...settings.sets]
+    if (newSets.includes(set)) {
+      newSets = newSets.filter(s => s !== set)
+    } else {
+      if (newSets.length >= 2) {
+        newSets.shift() // FIFO
+      }
+      newSets.push(set)
+    }
+    
+    let newCounts = { ...settings.set_counts }
+    if (newSets.length === 2 && !settings.mix_equal) {
+      const half = Math.floor(settings.rounds / 2)
+      newCounts = {
+        [newSets[0]]: settings.rounds - half,
+        [newSets[1]]: half
+      }
+    }
+    onUpdateSettings({ sets: newSets, set_counts: newCounts })
+  }
+
+  const handleUpdateRounds = (r: number) => {
+    const updates: Partial<RoomSettings> = { rounds: r }
+    
+    if (settings.custom_only && r > customQTotal) {
+      updates.custom_only = false
+    }
+
+    if (!settings.mix_equal && settings.sets.length === 2) {
+      const setA = settings.sets[0]
+      const setB = settings.sets[1]
+      let countA = settings.set_counts[setA] || Math.floor(r / 2)
+      countA = Math.max(1, Math.min(countA, r - 1))
+      updates.set_counts = {
+        [setA]: countA,
+        [setB]: r - countA
+      }
+    }
+    onUpdateSettings(updates)
+  }
+
+  const handleToggleMixEqual = (v: boolean) => {
+    if (v) {
+       onUpdateSettings({ mix_equal: true })
+    } else {
+       if (settings.sets.length === 2) {
+         const half = Math.floor(settings.rounds / 2)
+         onUpdateSettings({ 
+           mix_equal: false, 
+           set_counts: { 
+             [settings.sets[0]]: settings.rounds - half, 
+             [settings.sets[1]]: half 
+           } 
+         })
+       } else {
+         onUpdateSettings({ mix_equal: false })
+       }
+    }
   }
 
   return (
@@ -104,8 +158,8 @@ export default function LobbyPanel({
         <div>
           <h3 className="font-bold text-[#FF2D8B] mb-2">Number of Rounds</h3>
           <div className="flex gap-2 flex-wrap">
-            {[5, 10, 20, 30, 50].map(r => (
-              <Chip key={r} label={`${r}`} active={settings.rounds === r} onClick={() => onUpdateSettings({ rounds: r })} disabled={!isHost} />
+            {[5, 10, 15, 20].map(r => (
+              <Chip key={r} label={`${r}`} active={settings.rounds === r} onClick={() => handleUpdateRounds(r)} disabled={!isHost} />
             ))}
           </div>
         </div>
@@ -117,33 +171,44 @@ export default function LobbyPanel({
 
         {!settings.custom_only && (
           <div>
-            <h3 className="font-bold text-[#FF2D8B] mb-2">Question Sets</h3>
+            <h3 className="font-bold text-[#FF2D8B] mb-2">Question Sets (choose any 2)</h3>
             <div className="flex gap-2 flex-wrap mb-4">
               {BUILT_IN_SETS.map(set => (
                 <Chip key={set} label={set} active={settings.sets.includes(set)} onClick={() => toggleSet(set)} disabled={!isHost} />
               ))}
             </div>
             
-            {settings.sets.length > 1 && (
+            {settings.sets.length === 2 && (
               <div className="flex items-center justify-between bg-black/20 p-3 rounded-xl">
                 <span className="font-bold">Equal Distribution</span>
-                <Toggle on={settings.mix_equal} onChange={v => onUpdateSettings({ mix_equal: v })} disabled={!isHost} />
+                <Toggle on={settings.mix_equal} onChange={handleToggleMixEqual} disabled={!isHost} />
               </div>
             )}
             
-            {settings.sets.length > 1 && !settings.mix_equal && (
-              <div className="bg-black/20 p-3 rounded-xl mt-2 space-y-2">
-                <p className="text-sm text-[#b093ff] mb-2">Custom Distribution (Max 15 per set)</p>
-                {settings.sets.map(set => (
-                  <div key={set} className="flex justify-between items-center">
-                    <span>{set}</span>
-                    <div className="flex items-center gap-3">
-                      <button disabled={!isHost} onClick={() => onUpdateSettings({ set_counts: { ...settings.set_counts, [set]: Math.max(0, (settings.set_counts[set]||0) - 1) } })} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center">-</button>
-                      <span className="w-4 text-center">{settings.set_counts[set] || 0}</span>
-                      <button disabled={!isHost} onClick={() => onUpdateSettings({ set_counts: { ...settings.set_counts, [set]: Math.min(15, (settings.set_counts[set]||0) + 1) } })} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center">+</button>
-                    </div>
-                  </div>
-                ))}
+            {settings.sets.length === 2 && !settings.mix_equal && (
+              <div className="bg-black/20 p-4 rounded-xl mt-2 space-y-4">
+                <p className="text-sm text-[#b093ff] text-center font-bold">Custom Distribution</p>
+                <div className="flex justify-between items-center text-sm font-bold">
+                  <span className="text-white">{settings.sets[0]}: {settings.set_counts[settings.sets[0]] || Math.ceil(settings.rounds / 2)}</span>
+                  <span className="text-white">{settings.sets[1]}: {settings.rounds - (settings.set_counts[settings.sets[0]] || Math.ceil(settings.rounds / 2))}</span>
+                </div>
+                <input 
+                  type="range" 
+                  min={1} 
+                  max={settings.rounds - 1} 
+                  value={settings.set_counts[settings.sets[0]] || Math.ceil(settings.rounds / 2)}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value)
+                    onUpdateSettings({ 
+                      set_counts: { 
+                        [settings.sets[0]]: val, 
+                        [settings.sets[1]]: settings.rounds - val 
+                      } 
+                    })
+                  }}
+                  disabled={!isHost}
+                  className="w-full accent-[#FF2D8B] cursor-pointer"
+                />
               </div>
             )}
           </div>
@@ -155,9 +220,18 @@ export default function LobbyPanel({
         </div>
 
         {settings.allow_custom && (
-          <div className="flex items-center justify-between bg-black/20 p-3 rounded-xl">
-            <span className="font-bold">Use Only Custom Questions</span>
-            <Toggle on={settings.custom_only} onChange={v => onUpdateSettings({ custom_only: v })} disabled={!isHost} />
+          <div className={`flex items-center justify-between bg-black/20 p-3 rounded-xl ${customQTotal < settings.rounds ? 'opacity-50' : ''}`}>
+            <div className="flex flex-col">
+              <span className="font-bold">Use Only Custom Questions</span>
+              {customQTotal < settings.rounds && (
+                <span className="text-xs text-red-400">Need {settings.rounds} custom questions</span>
+              )}
+            </div>
+            <Toggle 
+              on={settings.custom_only} 
+              onChange={v => onUpdateSettings({ custom_only: v })} 
+              disabled={!isHost || customQTotal < settings.rounds} 
+            />
           </div>
         )}
 
