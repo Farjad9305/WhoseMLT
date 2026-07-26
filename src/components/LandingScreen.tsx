@@ -152,13 +152,13 @@ function GuideCard() {
     <div className="glass-panel p-6 w-full max-w-md z-10 mt-8 mb-10">
       <div className="flex mb-4 bg-black/40 p-1 rounded-xl">
         <button
-          className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${guideTab === 'rules' ? 'bg-[#7B2FFF] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
+          className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${guideTab === 'rules' ? 'bg-[#7B2FFF] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
           onClick={() => setGuideTab('rules')}
         >
           🎮 How to Play
         </button>
         <button
-          className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${guideTab === 'settings' ? 'bg-[#FF2D8B] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
+          className={`flex-1 py-2 rounded-lg font-bold text-sm transition-all ${guideTab === 'settings' ? 'bg-[#FF2D8B] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
           onClick={() => setGuideTab('settings')}
         >
           ⚙️ Game Settings Guide
@@ -166,22 +166,22 @@ function GuideCard() {
       </div>
 
       {guideTab === 'rules' ? (
-        <ol className="space-y-4 text-sm text-[#FFFFFF] list-decimal list-inside">
-          <li><strong className="text-white">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
-          <li><strong className="text-white">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
-          <li><strong className="text-white">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>
-          <li><strong className="text-white">Results:</strong> See who got the most votes at the end of the game and discover what your friends really think of you.</li>
+        <ol className="space-y-4 text-base text-[#F0EBFF] leading-relaxed list-decimal list-inside">
+          <li><strong className="text-white font-bold">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
+          <li><strong className="text-white font-bold">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
+          <li><strong className="text-white font-bold">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>
+          <li><strong className="text-white font-bold">Results:</strong> See who got the most votes at the end of the game and discover what your friends really think of you.</li>
         </ol>
       ) : (
-        <ul className="space-y-3 text-xs text-[#FFFFFF] max-h-64 overflow-y-auto pr-1 custom-scrollbar">
-          <li><strong className="text-[#FF2D8B]">⏱️ Voting Time:</strong> Adjust how many seconds players have to cast their vote each round.</li>
-          <li><strong className="text-[#FF2D8B]">🔢 No. of Rounds:</strong> Set the total number of questions per game (5, 10, 15, or 20).</li>
-          <li><strong className="text-[#FF2D8B]">🗳️ Multiple Votes:</strong> Allow players to vote for more than one person in a single round.</li>
-          <li><strong className="text-[#FF2D8B]">📚 Question Sets:</strong> Choose up to 2 themed sets of questions (Classic, Chaos, Awkward, Polarizing, Dirty).</li>
-          <li><strong className="text-[#FF2D8B]">⚖️ Equal Distribution:</strong> Toggle whether questions are split equally between selected sets or customized via slider.</li>
-          <li><strong className="text-[#FF2D8B]">✍️ Allow Custom Questions:</strong> Let players submit their own spicy prompts into the game pool.</li>
-          <li><strong className="text-[#FF2D8B]">🎯 Use Only Custom Questions:</strong> Play exclusively using custom prompts submitted by your friends in the lobby.</li>
-          <li><strong className="text-[#FF2D8B]">🔒 Privacy:</strong> Custom questions are anonymous during gameplay—no one else can see who added which prompt!</li>
+        <ul className="space-y-4 text-base text-[#F0EBFF] leading-relaxed max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+          <li><strong className="text-white font-bold">⏱️ Voting Time:</strong> Adjust how many seconds players have to cast their vote each round.</li>
+          <li><strong className="text-white font-bold">🔢 No. of Rounds:</strong> Set the total number of questions per game (5, 10, 15, or 20).</li>
+          <li><strong className="text-white font-bold">🗳️ Multiple Votes:</strong> Allow players to vote for more than one person in a single round.</li>
+          <li><strong className="text-white font-bold">📚 Question Sets:</strong> Choose up to 2 themed sets of questions (Classic, Chaos, Awkward, Polarizing, Dirty).</li>
+          <li><strong className="text-white font-bold">⚖️ Equal Distribution:</strong> Toggle whether questions are split equally between selected sets or customized via slider.</li>
+          <li><strong className="text-white font-bold">✍️ Allow Custom Questions:</strong> Let players submit their own spicy prompts into the game pool.</li>
+          <li><strong className="text-white font-bold">🎯 Use Only Custom Questions:</strong> Play exclusively using custom prompts submitted by your friends in the lobby.</li>
+          <li><strong className="text-white font-bold">🔒 Privacy:</strong> Custom questions are anonymous during gameplay—no one else can see who added which prompt!</li>
         </ul>
       )}
     </div>
