@@ -10,17 +10,18 @@ datasource db {
 }
 
 model Room {
-  id           String    @id
-  passwordHash String
-  hostId       String
-  hostName     String
-  phase        String    @default("lobby")
-  round        Int       @default(0)
-  phaseStart   DateTime?
-  version      Int       @default(0)
-  settings     Json
-  questions    Json      @default("[]")
-  createdAt    DateTime  @default(now())
+  id             String    @id
+  passwordHash   String
+  hostId         String
+  hostName       String
+  phase          String    @default("lobby")
+  round          Int       @default(0)
+  phaseStart     DateTime?
+  version        Int       @default(0)
+  settings       Json
+  questions      Json      @default("[]")
+  createdAt      DateTime  @default(now())
+  lastActivityAt DateTime  @default(now())
 
   players         Player[]
   votes           Vote[]

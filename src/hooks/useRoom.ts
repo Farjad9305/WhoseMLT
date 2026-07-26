@@ -23,6 +23,12 @@ export function useRoom(roomId: string, playerId: string | null) {
   const fetchRoom = useCallback(async () => {
     try {
       const res = await fetch(`/api/rooms/${roomId}`)
+      if (res.status === 404) {
+        sessionStorage.removeItem('roomId')
+        sessionStorage.removeItem('playerId')
+        window.location.href = '/'
+        return
+      }
       if (!res.ok) throw new Error('Failed to fetch room')
       const data = await res.json()
       setRoom(data.room)
@@ -66,6 +72,12 @@ export function useRoom(roomId: string, playerId: string | null) {
         if (prev.find(p => p.id === data.id)) return prev
         return [...prev, data]
       })
+    })
+
+    channel.bind('room-closed', () => {
+      sessionStorage.removeItem('roomId')
+      sessionStorage.removeItem('playerId')
+      window.location.href = '/'
     })
     
     channel.bind('player-left', ({ playerId: leftPlayerId }: { playerId: string }) => {

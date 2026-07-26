@@ -132,7 +132,8 @@ exports.Prisma.RoomScalarFieldEnum = {
   version: 'version',
   settings: 'settings',
   questions: 'questions',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  lastActivityAt: 'lastActivityAt'
 };
 
 exports.Prisma.PlayerScalarFieldEnum = {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ roomId: string }> }) {
   try {
@@ -45,6 +46,8 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ r
       await prisma.room.delete({ where: { id: roomId } }).catch(() => null)
       return NextResponse.json({ success: true, roomDeleted: true })
     }
+
+    touchRoom(roomId) // Update activity since room is still active
 
     // Host migration
     if (room.hostId === playerId) {

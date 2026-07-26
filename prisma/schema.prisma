@@ -21,6 +21,7 @@ model Room {
   settings        Json
   questions       Json             @default("[]")
   createdAt       DateTime         @default(now())
+  lastActivityAt  DateTime         @default(now())
 
   players         Player[]
   votes           Vote[]

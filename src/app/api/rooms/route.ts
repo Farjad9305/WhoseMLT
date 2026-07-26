@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateRoomId, generatePlayerId, hashPassword } from '@/lib/game-logic'
 import { RoomSettings } from '@/lib/types'
+import { cleanIdleRooms } from '@/lib/room-cleanup'
 
 const defaultSettings: RoomSettings = {
   voting_time: 30,
@@ -16,6 +17,7 @@ const defaultSettings: RoomSettings = {
 
 export async function POST(request: Request) {
   try {
+    cleanIdleRooms() // Background cleanup of idle rooms
     const { hostName, password } = await request.json()
 
     if (!hostName || hostName.length < 2) {

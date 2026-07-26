@@ -1314,6 +1314,7 @@ export namespace Prisma {
     phaseStart: Date | null
     version: number | null
     createdAt: Date | null
+    lastActivityAt: Date | null
   }
 
   export type RoomMaxAggregateOutputType = {
@@ -1326,6 +1327,7 @@ export namespace Prisma {
     phaseStart: Date | null
     version: number | null
     createdAt: Date | null
+    lastActivityAt: Date | null
   }
 
   export type RoomCountAggregateOutputType = {
@@ -1340,6 +1342,7 @@ export namespace Prisma {
     settings: number
     questions: number
     createdAt: number
+    lastActivityAt: number
     _all: number
   }
 
@@ -1364,6 +1367,7 @@ export namespace Prisma {
     phaseStart?: true
     version?: true
     createdAt?: true
+    lastActivityAt?: true
   }
 
   export type RoomMaxAggregateInputType = {
@@ -1376,6 +1380,7 @@ export namespace Prisma {
     phaseStart?: true
     version?: true
     createdAt?: true
+    lastActivityAt?: true
   }
 
   export type RoomCountAggregateInputType = {
@@ -1390,6 +1395,7 @@ export namespace Prisma {
     settings?: true
     questions?: true
     createdAt?: true
+    lastActivityAt?: true
     _all?: true
   }
 
@@ -1491,6 +1497,7 @@ export namespace Prisma {
     settings: JsonValue
     questions: JsonValue
     createdAt: Date
+    lastActivityAt: Date
     _count: RoomCountAggregateOutputType | null
     _avg: RoomAvgAggregateOutputType | null
     _sum: RoomSumAggregateOutputType | null
@@ -1524,6 +1531,7 @@ export namespace Prisma {
     settings?: boolean
     questions?: boolean
     createdAt?: boolean
+    lastActivityAt?: boolean
     players?: boolean | Room$playersArgs<ExtArgs>
     votes?: boolean | Room$votesArgs<ExtArgs>
     chatMessages?: boolean | Room$chatMessagesArgs<ExtArgs>
@@ -1543,6 +1551,7 @@ export namespace Prisma {
     settings?: boolean
     questions?: boolean
     createdAt?: boolean
+    lastActivityAt?: boolean
   }, ExtArgs["result"]["room"]>
 
   export type RoomSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1557,6 +1566,7 @@ export namespace Prisma {
     settings?: boolean
     questions?: boolean
     createdAt?: boolean
+    lastActivityAt?: boolean
   }, ExtArgs["result"]["room"]>
 
   export type RoomSelectScalar = {
@@ -1571,9 +1581,10 @@ export namespace Prisma {
     settings?: boolean
     questions?: boolean
     createdAt?: boolean
+    lastActivityAt?: boolean
   }
 
-  export type RoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "passwordHash" | "hostId" | "hostName" | "phase" | "round" | "phaseStart" | "version" | "settings" | "questions" | "createdAt", ExtArgs["result"]["room"]>
+  export type RoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "passwordHash" | "hostId" | "hostName" | "phase" | "round" | "phaseStart" | "version" | "settings" | "questions" | "createdAt" | "lastActivityAt", ExtArgs["result"]["room"]>
   export type RoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     players?: boolean | Room$playersArgs<ExtArgs>
     votes?: boolean | Room$votesArgs<ExtArgs>
@@ -1604,6 +1615,7 @@ export namespace Prisma {
       settings: Prisma.JsonValue
       questions: Prisma.JsonValue
       createdAt: Date
+      lastActivityAt: Date
     }, ExtArgs["result"]["room"]>
     composites: {}
   }
@@ -2042,6 +2054,7 @@ export namespace Prisma {
     readonly settings: FieldRef<"Room", 'Json'>
     readonly questions: FieldRef<"Room", 'Json'>
     readonly createdAt: FieldRef<"Room", 'DateTime'>
+    readonly lastActivityAt: FieldRef<"Room", 'DateTime'>
   }
     
 
@@ -6835,7 +6848,8 @@ export namespace Prisma {
     version: 'version',
     settings: 'settings',
     questions: 'questions',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    lastActivityAt: 'lastActivityAt'
   };
 
   export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
@@ -7025,6 +7039,7 @@ export namespace Prisma {
     settings?: JsonFilter<"Room">
     questions?: JsonFilter<"Room">
     createdAt?: DateTimeFilter<"Room"> | Date | string
+    lastActivityAt?: DateTimeFilter<"Room"> | Date | string
     players?: PlayerListRelationFilter
     votes?: VoteListRelationFilter
     chatMessages?: ChatMessageListRelationFilter
@@ -7043,6 +7058,7 @@ export namespace Prisma {
     settings?: SortOrder
     questions?: SortOrder
     createdAt?: SortOrder
+    lastActivityAt?: SortOrder
     players?: PlayerOrderByRelationAggregateInput
     votes?: VoteOrderByRelationAggregateInput
     chatMessages?: ChatMessageOrderByRelationAggregateInput
@@ -7064,6 +7080,7 @@ export namespace Prisma {
     settings?: JsonFilter<"Room">
     questions?: JsonFilter<"Room">
     createdAt?: DateTimeFilter<"Room"> | Date | string
+    lastActivityAt?: DateTimeFilter<"Room"> | Date | string
     players?: PlayerListRelationFilter
     votes?: VoteListRelationFilter
     chatMessages?: ChatMessageListRelationFilter
@@ -7082,6 +7099,7 @@ export namespace Prisma {
     settings?: SortOrder
     questions?: SortOrder
     createdAt?: SortOrder
+    lastActivityAt?: SortOrder
     _count?: RoomCountOrderByAggregateInput
     _avg?: RoomAvgOrderByAggregateInput
     _max?: RoomMaxOrderByAggregateInput
@@ -7104,6 +7122,7 @@ export namespace Prisma {
     settings?: JsonWithAggregatesFilter<"Room">
     questions?: JsonWithAggregatesFilter<"Room">
     createdAt?: DateTimeWithAggregatesFilter<"Room"> | Date | string
+    lastActivityAt?: DateTimeWithAggregatesFilter<"Room"> | Date | string
   }
 
   export type PlayerWhereInput = {
@@ -7341,6 +7360,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerCreateNestedManyWithoutRoomInput
     votes?: VoteCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageCreateNestedManyWithoutRoomInput
@@ -7359,6 +7379,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutRoomInput
     votes?: VoteUncheckedCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageUncheckedCreateNestedManyWithoutRoomInput
@@ -7377,6 +7398,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUpdateManyWithoutRoomNestedInput
     votes?: VoteUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUpdateManyWithoutRoomNestedInput
@@ -7395,6 +7417,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUncheckedUpdateManyWithoutRoomNestedInput
     votes?: VoteUncheckedUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUncheckedUpdateManyWithoutRoomNestedInput
@@ -7413,6 +7436,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
   }
 
   export type RoomUpdateManyMutationInput = {
@@ -7427,6 +7451,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoomUncheckedUpdateManyInput = {
@@ -7441,6 +7466,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlayerCreateInput = {
@@ -7791,6 +7817,7 @@ export namespace Prisma {
     settings?: SortOrder
     questions?: SortOrder
     createdAt?: SortOrder
+    lastActivityAt?: SortOrder
   }
 
   export type RoomAvgOrderByAggregateInput = {
@@ -7808,6 +7835,7 @@ export namespace Prisma {
     phaseStart?: SortOrder
     version?: SortOrder
     createdAt?: SortOrder
+    lastActivityAt?: SortOrder
   }
 
   export type RoomMinOrderByAggregateInput = {
@@ -7820,6 +7848,7 @@ export namespace Prisma {
     phaseStart?: SortOrder
     version?: SortOrder
     createdAt?: SortOrder
+    lastActivityAt?: SortOrder
   }
 
   export type RoomSumOrderByAggregateInput = {
@@ -8742,6 +8771,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     votes?: VoteCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionCreateNestedManyWithoutRoomInput
@@ -8759,6 +8789,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     votes?: VoteUncheckedCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageUncheckedCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionUncheckedCreateNestedManyWithoutRoomInput
@@ -8792,6 +8823,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     votes?: VoteUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUpdateManyWithoutRoomNestedInput
@@ -8809,6 +8841,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     votes?: VoteUncheckedUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUncheckedUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUncheckedUpdateManyWithoutRoomNestedInput
@@ -8826,6 +8859,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionCreateNestedManyWithoutRoomInput
@@ -8843,6 +8877,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageUncheckedCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionUncheckedCreateNestedManyWithoutRoomInput
@@ -8876,6 +8911,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUpdateManyWithoutRoomNestedInput
@@ -8893,6 +8929,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUncheckedUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUncheckedUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUncheckedUpdateManyWithoutRoomNestedInput
@@ -8910,6 +8947,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerCreateNestedManyWithoutRoomInput
     votes?: VoteCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionCreateNestedManyWithoutRoomInput
@@ -8927,6 +8965,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutRoomInput
     votes?: VoteUncheckedCreateNestedManyWithoutRoomInput
     customQuestions?: CustomQuestionUncheckedCreateNestedManyWithoutRoomInput
@@ -8960,6 +8999,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUpdateManyWithoutRoomNestedInput
     votes?: VoteUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUpdateManyWithoutRoomNestedInput
@@ -8977,6 +9017,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUncheckedUpdateManyWithoutRoomNestedInput
     votes?: VoteUncheckedUpdateManyWithoutRoomNestedInput
     customQuestions?: CustomQuestionUncheckedUpdateManyWithoutRoomNestedInput
@@ -8994,6 +9035,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerCreateNestedManyWithoutRoomInput
     votes?: VoteCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageCreateNestedManyWithoutRoomInput
@@ -9011,6 +9053,7 @@ export namespace Prisma {
     settings: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
+    lastActivityAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutRoomInput
     votes?: VoteUncheckedCreateNestedManyWithoutRoomInput
     chatMessages?: ChatMessageUncheckedCreateNestedManyWithoutRoomInput
@@ -9044,6 +9087,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUpdateManyWithoutRoomNestedInput
     votes?: VoteUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUpdateManyWithoutRoomNestedInput
@@ -9061,6 +9105,7 @@ export namespace Prisma {
     settings?: JsonNullValueInput | InputJsonValue
     questions?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActivityAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUncheckedUpdateManyWithoutRoomNestedInput
     votes?: VoteUncheckedUpdateManyWithoutRoomNestedInput
     chatMessages?: ChatMessageUncheckedUpdateManyWithoutRoomNestedInput

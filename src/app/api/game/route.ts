@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import { buildQuestions } from '@/lib/game-logic'
 import { RoomSettings } from '@/lib/types'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function POST(request: Request) {
   try {
@@ -48,7 +49,8 @@ export async function POST(request: Request) {
         questions: finalQuestions as any,
         version: {
           increment: 1
-        }
+        },
+        lastActivityAt: new Date()
       },
       include: {
         players: true
@@ -130,7 +132,8 @@ export async function PATCH(request: Request) {
         phase: nextPhase,
         round: nextRound,
         phaseStart: new Date(),
-        version: knownVersion + 1
+        version: knownVersion + 1,
+        lastActivityAt: new Date()
       }
     })
 

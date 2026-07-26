@@ -27,6 +27,7 @@ export default function LobbyPanel({
   
   const [editingQId, setEditingQId] = useState<string | null>(null)
   const [editQText, setEditQText] = useState('')
+  const [helpModal, setHelpModal] = useState<'rules' | 'settings' | null>(null)
 
   const fetchMyQs = async () => {
     const pid = sessionStorage.getItem('playerId')
@@ -155,7 +156,56 @@ export default function LobbyPanel({
   }
 
   return (
-    <div className="glass-panel p-6 h-full flex flex-col overflow-y-auto">
+    <div className="glass-panel p-6 h-full flex flex-col overflow-y-auto relative">
+      {/* Lobby Help Buttons */}
+      <div className="flex justify-center gap-2 mb-4">
+        <button
+          onClick={() => setHelpModal('rules')}
+          className="bg-[#7B2FFF]/20 hover:bg-[#7B2FFF]/40 border border-[#7B2FFF]/50 text-[#F0EBFF] px-3 py-1 rounded-full text-xs font-bold transition-all shadow-sm"
+        >
+          ❓ How to Play
+        </button>
+        <button
+          onClick={() => setHelpModal('settings')}
+          className="bg-[#FF2D8B]/20 hover:bg-[#FF2D8B]/40 border border-[#FF2D8B]/50 text-[#F0EBFF] px-3 py-1 rounded-full text-xs font-bold transition-all shadow-sm"
+        >
+          ⚙️ Settings Guide
+        </button>
+      </div>
+
+      {helpModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel p-6 max-w-md w-full relative border border-white/20 shadow-2xl animate-fade-in">
+            <button onClick={() => setHelpModal(null)} className="absolute top-4 right-4 text-white/70 hover:text-white text-lg font-bold">✕</button>
+            {helpModal === 'rules' ? (
+              <>
+                <h2 className="font-bold text-xl text-[#7B2FFF] mb-4 flex items-center gap-2"><span>📖</span> How to Play</h2>
+                <ol className="space-y-4 text-sm text-[#FFFFFF] list-decimal list-inside">
+                  <li><strong className="text-white">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
+                  <li><strong className="text-white">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
+                  <li><strong className="text-white">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>
+                  <li><strong className="text-white">Results:</strong> See who got the most votes at the end of the game and discover what your friends really think of you.</li>
+                </ol>
+              </>
+            ) : (
+              <>
+                <h2 className="font-bold text-xl text-[#FF2D8B] mb-4 flex items-center gap-2"><span>⚙️</span> Game Settings Guide</h2>
+                <ul className="space-y-3 text-xs text-[#FFFFFF] max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+                  <li><strong className="text-[#FF2D8B]">⏱️ Voting Time:</strong> Adjust how many seconds players have to cast their vote each round.</li>
+                  <li><strong className="text-[#FF2D8B]">🔢 No. of Rounds:</strong> Set the total number of questions per game (5, 10, 15, or 20).</li>
+                  <li><strong className="text-[#FF2D8B]">🗳️ Multiple Votes:</strong> Allow players to vote for more than one person in a single round.</li>
+                  <li><strong className="text-[#FF2D8B]">📚 Question Sets:</strong> Choose up to 2 themed sets of questions (Classic, Chaos, Awkward, Polarizing, Dirty).</li>
+                  <li><strong className="text-[#FF2D8B]">⚖️ Equal Distribution:</strong> Toggle whether questions are split equally between selected sets or customized via slider.</li>
+                  <li><strong className="text-[#FF2D8B]">✍️ Allow Custom Questions:</strong> Let players submit their own spicy prompts into the game pool.</li>
+                  <li><strong className="text-[#FF2D8B]">🎯 Use Only Custom Questions:</strong> Play exclusively using custom prompts submitted by your friends in the lobby.</li>
+                  <li><strong className="text-[#FF2D8B]">🔒 Privacy:</strong> Custom questions are anonymous during gameplay—no one else can see who added which prompt!</li>
+                </ul>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="text-center mb-8">
         <p className="text-[#F0EBFF] opacity-60 uppercase tracking-widest text-sm mb-2">Room Code</p>
         <div className="flex items-center justify-center gap-2">

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function POST(request: Request, { params }: { params: Promise<{ roomId: string }> }) {
   try {
@@ -20,6 +21,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ roo
         isSystem: false,
       }
     })
+
+    touchRoom(roomId) // Update room activity timestamp
 
     await pusher.trigger(`room-${roomId}`, 'chat-message', {
       id: message.id,

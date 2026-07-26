@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -38,6 +39,8 @@ export async function POST(request: Request) {
       }
     })
 
+    touchRoom(roomId)
+
     const count = await prisma.customQuestion.count({
       where: { roomId }
     })
@@ -70,6 +73,8 @@ export async function PATCH(request: Request) {
       data: { text: text.trim() }
     })
 
+    touchRoom(question.roomId)
+
     return NextResponse.json({ question: updated })
   } catch (error) {
     console.error('Update custom question error:', error)
@@ -92,6 +97,8 @@ export async function DELETE(request: Request) {
     await prisma.customQuestion.delete({
       where: { id }
     })
+
+    touchRoom(roomId)
 
     const count = await prisma.customQuestion.count({
       where: { roomId }

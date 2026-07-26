@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ roomId: string }> }) {
   try {
@@ -26,6 +27,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ ro
     }
 
     await pusher.trigger(`room-${roomId}`, 'player-renamed', { id, name: name.trim() })
+    touchRoom(roomId)
 
     return NextResponse.json({ success: true })
   } catch (error) {

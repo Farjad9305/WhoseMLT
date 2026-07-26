@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import { RoomSettings } from '@/lib/types'
+import { cleanIdleRooms } from '@/lib/room-cleanup'
 
 export async function GET(request: Request, { params }: { params: Promise<{ roomId: string }> }) {
   try {
+    cleanIdleRooms() // Background sweep
     const { roomId } = await params
 
     const room = await prisma.room.findUnique({
@@ -16,6 +18,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ room
 
     if (!room) {
       return NextResponse.json({ error: 'Room not found' }, { status: 404 })
+    }
+
+    // Check if room has been idle for 15+ minutes
+    if (new Date() > new Date(new Date(room.lastActivityAt).getTime() + 15 * 60 * 1000)) {
+      await prisma.room.delete({ where: { id: roomId } }).catch(() => {})
+      await pusher.trigger(`room-${roomId}`, 'room-closed', { reason: 'Room closed due to 15 minutes of inactivity.' }).catch(() => {})
+      return NextResponse.json({ error: 'Room closed due to inactivity' }, { status: 404 })
     }
 
     return NextResponse.json({
@@ -71,7 +80,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ ro
     const updatedRoom = await prisma.room.update({
       where: { id: roomId },
       data: {
-        settings: newSettings as object
+        settings: newSettings as object,
+        lastActivityAt: new Date()
       },
       include: {
         players: true

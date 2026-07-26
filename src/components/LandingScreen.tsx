@@ -108,11 +108,11 @@ export default function LandingScreen() {
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Display Name</label>
-              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
+              <input type="text" required minLength={2} maxLength={15} placeholder='e.g. "Alex"' value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors placeholder:text-white/30" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room Password</label>
-              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors" />
+              <input type="password" required minLength={3} maxLength={20} placeholder='e.g. "1234"' value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#FF2D8B] transition-colors placeholder:text-white/30" />
             </div>
             <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#FF2D8B] text-white glow-primary hover:bg-[#F0EBFF] transition-all mt-4">
               {loading ? 'Creating...' : 'Create Room'}
@@ -122,15 +122,15 @@ export default function LandingScreen() {
           <form onSubmit={handleJoin} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Display Name</label>
-              <input type="text" required minLength={2} value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
+              <input type="text" required minLength={2} maxLength={15} placeholder='e.g. "Alex"' value={name} onChange={e => setName(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors placeholder:text-white/30" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room ID</label>
-              <input type="text" required maxLength={8} value={roomId} onChange={e => setRoomId(e.target.value.toUpperCase())} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors font-mono tracking-widest text-center uppercase" />
+              <input type="text" required maxLength={8} placeholder='e.g. "A1B2C3D4"' value={roomId} onChange={e => setRoomId(e.target.value.toUpperCase())} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors font-mono tracking-widest text-center uppercase placeholder:text-white/30 placeholder:tracking-normal placeholder:font-sans" />
             </div>
             <div>
               <label className="block text-xs font-bold text-[#F0EBFF] mb-1">Room Password</label>
-              <input type="password" required minLength={3} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors" />
+              <input type="password" required minLength={3} maxLength={20} placeholder='e.g. "1234"' value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-black/40 border border-[#F0EBFF]/30 rounded-xl px-4 py-3 outline-none focus:border-[#7B2FFF] transition-colors placeholder:text-white/30" />
             </div>
             <button disabled={loading} type="submit" className="w-full py-3 rounded-xl font-bold bg-[#7B2FFF] text-white glow-accent hover:bg-pink-400 transition-all mt-4">
               {loading ? 'Joining...' : 'Join Room'}
@@ -139,18 +139,51 @@ export default function LandingScreen() {
         )}
       </div>
 
-      {/* How to Play Card */}
-      <div className="glass-panel p-6 w-full max-w-md z-10 mt-8 mb-10">
-        <h2 className="font-bold text-xl text-[#7B2FFF] mb-4 flex items-center gap-2">
-          <span>📖</span> How to Play
-        </h2>
+      {/* Guide Card (How to Play & Game Settings) */}
+      <GuideCard />
+    </div>
+  )
+}
+
+function GuideCard() {
+  const [guideTab, setGuideTab] = useState<'rules' | 'settings'>('rules')
+
+  return (
+    <div className="glass-panel p-6 w-full max-w-md z-10 mt-8 mb-10">
+      <div className="flex mb-4 bg-black/40 p-1 rounded-xl">
+        <button
+          className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${guideTab === 'rules' ? 'bg-[#7B2FFF] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
+          onClick={() => setGuideTab('rules')}
+        >
+          🎮 How to Play
+        </button>
+        <button
+          className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${guideTab === 'settings' ? 'bg-[#FF2D8B] text-white shadow-lg' : 'text-[#F0EBFF]/70 hover:text-white'}`}
+          onClick={() => setGuideTab('settings')}
+        >
+          ⚙️ Game Settings Guide
+        </button>
+      </div>
+
+      {guideTab === 'rules' ? (
         <ol className="space-y-4 text-sm text-[#FFFFFF] list-decimal list-inside">
           <li><strong className="text-white">Create or Join:</strong> One person creates a room and shares the 8-character code with friends.</li>
           <li><strong className="text-white">The Prompt:</strong> Every round, a "Most likely to..." question appears (e.g., "Most likely to survive a zombie apocalypse?").</li>
           <li><strong className="text-white">Vote:</strong> Vote for the friend who fits the prompt best before the timer runs out!</li>
           <li><strong className="text-white">Results:</strong> See who got the most votes at the end of the game and discover what your friends really think of you.</li>
         </ol>
-      </div>
+      ) : (
+        <ul className="space-y-3 text-xs text-[#FFFFFF] max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+          <li><strong className="text-[#FF2D8B]">⏱️ Voting Time:</strong> Adjust how many seconds players have to cast their vote each round.</li>
+          <li><strong className="text-[#FF2D8B]">🔢 No. of Rounds:</strong> Set the total number of questions per game (5, 10, 15, or 20).</li>
+          <li><strong className="text-[#FF2D8B]">🗳️ Multiple Votes:</strong> Allow players to vote for more than one person in a single round.</li>
+          <li><strong className="text-[#FF2D8B]">📚 Question Sets:</strong> Choose up to 2 themed sets of questions (Classic, Chaos, Awkward, Polarizing, Dirty).</li>
+          <li><strong className="text-[#FF2D8B]">⚖️ Equal Distribution:</strong> Toggle whether questions are split equally between selected sets or customized via slider.</li>
+          <li><strong className="text-[#FF2D8B]">✍️ Allow Custom Questions:</strong> Let players submit their own spicy prompts into the game pool.</li>
+          <li><strong className="text-[#FF2D8B]">🎯 Use Only Custom Questions:</strong> Play exclusively using custom prompts submitted by your friends in the lobby.</li>
+          <li><strong className="text-[#FF2D8B]">🔒 Privacy:</strong> Custom questions are anonymous during gameplay—no one else can see who added which prompt!</li>
+        </ul>
+      )}
     </div>
   )
 }

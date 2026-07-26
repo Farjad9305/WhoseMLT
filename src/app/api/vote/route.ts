@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import { RoomSettings } from '@/lib/types'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function POST(request: Request) {
   try {
@@ -89,6 +90,8 @@ export async function POST(request: Request) {
     const roundVotes = await prisma.vote.findMany({
       where: { roomId, round }
     })
+
+    touchRoom(roomId)
 
     await pusher.trigger(`room-${roomId}`, 'votes-synced', roundVotes)
 

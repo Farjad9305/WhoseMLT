@@ -26,7 +26,8 @@ export async function POST(request: Request) {
         round: 0,
         phaseStart: null,
         questions: '[]',
-        version: { increment: 1 }
+        version: { increment: 1 },
+        lastActivityAt: new Date()
       }
     })
 

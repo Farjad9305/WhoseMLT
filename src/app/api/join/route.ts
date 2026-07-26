@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { pusher } from '@/lib/pusher'
 import { generatePlayerId, hashPassword } from '@/lib/game-logic'
 import { RoomSettings } from '@/lib/types'
+import { touchRoom } from '@/lib/room-cleanup'
 
 export async function POST(request: Request) {
   try {
@@ -37,6 +38,8 @@ export async function POST(request: Request) {
         roomId
       }
     })
+
+    touchRoom(roomId) // Update activity timestamp
 
     await prisma.chatMessage.create({
       data: {
